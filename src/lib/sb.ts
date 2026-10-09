@@ -29,6 +29,8 @@ function friendly(status: number, body: any): string {
   if (/rate limit|too many|security purposes/i.test(msg)) return "Çok sık denedin. Bir dakika bekleyip tekrar dene.";
   if (/JWT expired/i.test(msg)) return "Oturumun yenilenemedi. Tekrar giriş yap.";
   if (/permission denied|row-level security/i.test(msg)) return "Bu işlem için yetkin yok.";
+  if (/Error sending (magic link|confirmation|.*email)|smtp|gomail/i.test(msg)) return "Giriş e-postası gönderilemedi. Yönetici e-posta (SMTP) ayarlarını kontrol etmeli.";
+  if (status === 504 || status === 408) return "Sunucu zamanında cevap vermedi. Biraz sonra tekrar dene.";
   if (/Payload too large|exceeded the maximum/i.test(msg)) return "Dosya en fazla 5 MB olabilir.";
   if (/mime type|invalid_mime/i.test(msg)) return "Yalnızca PDF, JPG veya PNG yüklenebilir.";
   return msg || "Bir şeyler ters gitti. Tekrar dene.";
@@ -40,8 +42,13 @@ async function raw(path: string, init: RequestInit & { auth?: boolean } = {}) {
   headers.set("apikey", supabaseKey);
   if (init.auth !== false && session) headers.set("Authorization", "Bearer " + session.access_token);
   let res: Response;
-  try { res = await fetch(supabaseUrl + path, { ...init, headers }); }
-  catch { throw new ApiError(friendly(0, null), 0); }
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), init.body instanceof Blob ? 120_000 : 30_000);
+  try { res = await fetch(supabaseUrl + path, { ...init, headers, signal: ctl.signal }); }
+  catch (e: any) {
+    if (e?.name === "AbortError") throw new ApiError("Sunucu 30 saniyede cevap vermedi. Bağlantını kontrol edip tekrar dene.", 408);
+    throw new ApiError(friendly(0, null), 0);
+  } finally { clearTimeout(timer); }
   const text = await res.text();
   let body: any = null;
   try { body = text ? JSON.parse(text) : null; } catch { body = text; }
