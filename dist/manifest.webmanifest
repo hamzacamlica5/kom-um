@@ -1,0 +1,17 @@
+{
+  "name": "KOMŞUM — Apartman Yönetimi",
+  "short_name": "KOMŞUM",
+  "description": "Aidat, kasa, duyuru, arıza ve evrak tek yerde.",
+  "lang": "tr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F3F5F2",
+  "theme_color": "#1D5C4F",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

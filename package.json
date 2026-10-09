@@ -1,0 +1,20 @@
+{
+  "name": "komsum",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KOMŞUM — apartman yönetimi PWA (Supabase + Vercel)",
+  "type": "module",
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "dev": "bun scripts/dev-server.ts",
+    "test": "bun test && bash supabase/tests/run.sh"
+  },
+  "dependencies": {
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "engines": { "node": ">=20" }
+}
