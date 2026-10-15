@@ -132,7 +132,7 @@ export function Terms() {
       <h2>4. Kayıtların değiştirilemezliği</h2>
       <p>Şeffaflık için para içeren kayıtlar silinemez. Yanlış kayıtlar gerekçesiyle iptal edilir ya da ters kayıtla düzeltilir; bu işlemler tüm geçmişiyle görünür kalır.</p>
       <h2>5. Ücretlendirme</h2>
-      <p>Bina sakinleri KOMŞUM'u ücretsiz kullanır. Apartman için abonelik ücreti, uygulamada ve web sitesinde duyurulan güncel tarifeye göre yönetimden alınır. Pilot dönemde hizmet ücretsiz sunulabilir. Ücretli döneme geçişten önce yöneticiler bilgilendirilir.</p>
+      <p>Abonelik ücretini apartman yönetimi öder; bina sakinlerinden KOMŞUM için ayrıca ücret alınmaz. Yönetim bu ücreti apartmanın ortak giderlerinden karşılayabilir ve bu durumda gider, kasa hareketlerinde herkes tarafından görülür. Abonelik ücreti, uygulamada ve web sitesinde duyurulan güncel tarifeye göre yönetimden alınır. Pilot dönemde hizmet ücretsiz sunulabilir. Ücretli döneme geçişten önce yöneticiler bilgilendirilir.</p>
       <h2>6. Sponsorlu içerik ve hizmet firmaları</h2>
       <p>Uygulamada bazı hizmet firmaları ücret karşılığında, belirli süreler için ve <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Sponsorlu içerik şu kurallara tabidir:</p>
       <ul>

@@ -223,7 +223,7 @@ export function Settings() {
             <Field label="Adres"><input id="s-baddr" maxLength={200} value={bf.address} onChange={(e) => setBf({ ...bf, address: e.target.value })} /></Field>
             <button className="btn btn-ghost btn-sm" disabled={busy}>Kaydet</button>
           </form>
-          <div className="pricebox"><span>{b.unit_count} daire · aylık abonelik</span><b>{tl(b.monthly_price)} / ay</b><small>0–10 daire 99 TL, her ilave 10 daire +100 TL. Sakinler ücretsiz.</small></div>
+          <div className="pricebox"><span>{b.unit_count} daire · aylık abonelik</span><b>{tl(b.monthly_price)} / ay</b><small>0–10 daire 99 TL, her ilave 10 daire +100 TL. Ücreti apartman öder, sakinler ayrıca ödemez.</small></div>
           <button className="btn btn-ghost" onClick={() => setTransfer(true)}>Yönetimi devret</button>
         </section>
       )}
