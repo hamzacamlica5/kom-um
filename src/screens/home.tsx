@@ -69,6 +69,8 @@ export function Home() {
             )}
           </section>
 
+          <Link to="/nereye" className="todo whereto"><b>Aidatım nereye gitti?</b><span>Giderlerin dağılımını ve dairenin payını gör.</span></Link>
+
           <section className="card">
             <div className="row-between"><h2>Son duyurular</h2><Link to="/duyurular" className="small">Tümü →</Link></div>
             {d!.anns.length === 0 ? <p className="muted small">Henüz duyuru yok.</p> : (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { auth, rpc } from "../lib/sb";
 import { price, parseAmount, tl } from "../lib/format";
 import { Field, useAction, useToast, Loading, ErrorBox } from "../ui";
-import { useApp, useRoute } from "../state";
+import { useApp, useRoute, Link } from "../state";
 
 export function Brand({ small }: { small?: boolean }) {
   return (
@@ -40,6 +40,7 @@ export function Login() {
             </Field>
             <button className="btn btn-primary btn-lg" disabled={busy}>{busy ? "Gönderiliyor…" : "Giriş kodu gönder"}</button>
             <p className="muted small">Şifre yok. E-postana gelen kodla giriş yaparsın; hesabın yoksa otomatik açılır.</p>
+            <p className="muted small">Devam ederek <Link to="/kullanim-sartlari">Kullanım Şartları</Link>'nı kabul etmiş ve <Link to="/kvkk">KVKK Aydınlatma Metni</Link>'ni okumuş olursun.</p>
           </form>
         ) : (
           <form className="stack" onSubmit={async (e) => {

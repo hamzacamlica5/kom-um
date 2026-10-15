@@ -265,4 +265,56 @@ select t_eq(tl(1500000), '1.500.000 TL', 'milyon TL biçimi');
 select t_eq(period_tr('2026-10'), 'Ekim 2026', 'dönem adı');
 select t_eq(period_tr('2027-01'), 'Ocak 2027', 'dönem adı ocak');
 \o
+
+-- ---------- 13. Gider dağılımı, toplu davet, hesap silme ----------
+\o /dev/null
+-- Yeni bina: 4 daire, D1 1000 TL, diğerleri 500 TL
+insert into auth.users(id, email) values
+ ('00000000-0000-0000-0000-0000000000e1','y2@test'), ('00000000-0000-0000-0000-0000000000e2','s2@test'), ('00000000-0000-0000-0000-0000000000e3','s3@test');
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000e1"}', false);
+set role authenticated;
+select save_profile('Yönetici İki', null);
+select create_building('Gül Apt', null, 4, 500, 5) as b2 \gset
+select save_unit(:'b2', (select id from units where building_id = :'b2' and label = 'Daire 1'), 'Daire 1', 1000, 5);
+select generate_dues(:'b2', to_char(current_date, 'YYYY-MM'));
+select add_expense(:'b2', 'Temizlik', 'Merdiven', null, 600, current_date, null);
+select add_expense(:'b2', 'Asansör', 'Bakım', null, 300, current_date, null);
+select add_expense(:'b2', 'Temizlik', 'Malzeme', null, 100, current_date, null);
+select void_expense(add_expense(:'b2', 'Elektrik', 'Mükerrer', null, 999, current_date, null), 'Yanlış girildi');
+-- toplu davet: 4 boş daire
+select t_eq((select count(*)::int from bulk_invites(:'b2')), 4, 'toplu davet: 4 boş daire');
+select t_eq((select count(distinct token)::int from bulk_invites(:'b2')), 4, 'toplu davet: her daireye bir bağlantı');
+select token as tk1 from bulk_invites(:'b2') where unit_label = 'Daire 1' \gset
+select t_eq((select token from bulk_invites(:'b2') where unit_label = 'Daire 1'), :'tk1', 'toplu davet tekrar çağrılınca aynı bağlantıyı verir');
+select t_eq((select (expense_breakdown(:'b2', date_trunc('month', current_date)::date, current_date + 40)->>'total_expense')::numeric), 1000::numeric, 'dağılım: iptal edilen gider hariç toplam');
+select t_eq((select expense_breakdown(:'b2', date_trunc('month', current_date)::date, current_date + 40)->'categories'->0->>'category'), 'Temizlik', 'dağılım: en büyük kategori temizlik');
+select t_eq((select (expense_breakdown(:'b2', date_trunc('month', current_date)::date, current_date + 40)->'categories'->0->>'amount')::numeric), 700::numeric, 'dağılım: temizlik toplamı');
+select t_eq((select expense_breakdown(:'b2', date_trunc('month', current_date)::date, current_date + 40)->>'share_ratio'), null, 'dağılım: dairesiz yöneticinin payı yok');
+reset role;
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000e2"}', false);
+set role authenticated;
+select save_profile('Sakin İki', null);
+select accept_invite(:'tk1');
+select t_eq(round((expense_breakdown(:'b2', date_trunc('month', current_date)::date, current_date + 40)->>'share_ratio')::numeric, 2), 0.40::numeric, 'dağılım: 1000/2500 = %40 pay');
+select t_eq((select count(*)::int from expenses), 4, 'sakin giderleri görür');
+select t_expect_err(format($q$select bulk_invites(%L)$q$, :'b2'), 'yalnızca yönetici');
+-- sakin hesabını siler
+select prepare_account_deletion();
+select t_eq((select count(*)::int from my_buildings()), 0, 'hesap silinince üyelik biter');
+reset role;
+select t_eq((select full_name from profiles where id = '00000000-0000-0000-0000-0000000000e2'), 'Silinmiş kullanıcı', 'profil anonimleşti');
+select t_eq((select count(*)::int from dues_charges where building_id = :'b2'), 4, 'apartmanın kayıtları korunur');
+-- yönetici, başka üye varken silemez
+select token as tk2 from invites where building_id = :'b2' and unit_id = (select id from units where building_id = :'b2' and label = 'Daire 2') and used_at is null and revoked_at is null \gset
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000e3"}', false);
+set role authenticated;
+select save_profile('Sakin Üç', null);
+select accept_invite(:'tk2');
+reset role;
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000e1"}', false);
+set role authenticated;
+select t_expect_err($q$select prepare_account_deletion()$q$, 'yönetimi bir sakine devret');
+select t_eq((select count(*)::int from bulk_invites(:'b2')), 3, 'toplu davet: dolu daire atlanır, hesabı silinenin dairesi tekrar boş');
+reset role;
+\o
 \echo 'TÜM TESTLER GEÇTİ'

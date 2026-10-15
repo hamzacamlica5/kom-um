@@ -9,6 +9,8 @@ import { Dues, Notices } from "./screens/dues";
 import { Cash } from "./screens/cash";
 import { Announcements, Requests, Documents } from "./screens/board";
 import { Units, Settings, Inbox } from "./screens/manage";
+import { Breakdown } from "./screens/breakdown";
+import { Kvkk, Privacy, Terms } from "./screens/legal";
 
 const I = {
   home: <path d="M3 11.5 12 4l9 7.5M5.5 9.8V20h13V9.8" />,
@@ -52,7 +54,7 @@ function Shell() {
     ["/talepler", "Talepler", I.req],
     ["/menu", "Menü", I.menu, isManager ? notices : 0],
   ];
-  const active = (p: string) => (p === "/" ? path === "/" : path.startsWith(p)) || (p === "/menu" && ["/duyurular", "/evrak", "/daireler", "/ayarlar", "/bildirimler"].some((x) => path.startsWith(x)));
+  const active = (p: string) => (p === "/" ? path === "/" : path.startsWith(p)) || (p === "/menu" && ["/duyurular", "/evrak", "/daireler", "/ayarlar", "/bildirimler", "/nereye"].some((x) => path.startsWith(x)));
 
   let page: React.ReactNode;
   switch (path) {
@@ -67,6 +69,7 @@ function Shell() {
     case "/ayarlar": page = <Settings />; break;
     case "/bildirim-kutusu": page = <Inbox onSeen={() => setUnread(0)} />; break;
     case "/menu": page = <Menu notices={notices} />; break;
+    case "/nereye": page = <Breakdown />; break;
     default: page = <Home />;
   }
 
@@ -91,6 +94,7 @@ function Menu({ notices }: { notices: number }) {
   const { isManager } = useApp();
   const items: [string, string, string, number?][] = [
     ...(isManager ? [["/bildirimler", "Ödeme bildirimleri", "Sakinlerin dekontlarını onayla", notices] as [string, string, string, number]] : []),
+    ["/nereye", "Aidatım nereye gitti?", "Giderlerin dağılımı ve dairenin payı"],
     ["/duyurular", "Duyurular", isManager ? "Duyuru yayınla, sakinlere bildirim gitsin" : "Yönetimden duyurular"],
     ["/evrak", "Evrak", isManager ? "Fatura, tutanak, sözleşme" : "Paylaşılan belgeler"],
     ...(isManager ? [["/daireler", "Daireler ve sakinler", "Aidat tutarları, davet bağlantıları"] as [string, string, string]] : []),
@@ -120,6 +124,9 @@ function Root() {
     }
   }, [userId, profile, invite]);
 
+  if (path === "/kvkk") return <Kvkk />;
+  if (path === "/gizlilik") return <Privacy />;
+  if (path === "/kullanim-sartlari") return <Terms />;
   if (invite) return <Join token={invite} />;
   if (!userId) return <Login />;
   if (loadError && (profile === undefined || buildings === undefined)) return <div className="auth"><div className="auth-card"><Brand small /><ErrorBox msg={loadError} retry={refresh} /></div></div>;

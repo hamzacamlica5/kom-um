@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { auth, from, rpc } from "../lib/sb";
+import { auth, from, rpc, serverPost, forgetSession } from "../lib/sb";
+import { toCsv, downloadCsv, slug } from "../lib/csv";
+import { STATUS_LABEL, istanbulToday } from "../lib/format";
 import { tl, parseAmount, price, ago } from "../lib/format";
 import { enablePush, disablePush, pushState, PushState, isStandalone } from "../lib/push";
-import { useApp, useRoute } from "../state";
+import { useApp, useRoute, Link } from "../state";
 import { Empty, ErrorBox, Field, Loading, PageHead, ReasonSheet, Sheet, useAction, useLoad, useToast } from "../ui";
 import { CreateBuilding } from "./auth";
 
@@ -17,6 +19,7 @@ export function Units() {
   const { b } = useApp();
   const bid = b!.building_id;
   const [sel, setSel] = useState<Unit | "new" | null>(null);
+  const [bulk, setBulk] = useState(false);
   const data = useLoad(async () => {
     const [units, members, invites] = await Promise.all([
       from<Unit>("units").eq("building_id", bid).isNull("archived_at"),
@@ -37,7 +40,10 @@ export function Units() {
       {data.loading && !d ? <Loading /> : data.error ? <ErrorBox msg={data.error} retry={data.reload} /> : (
         <>
           {d!.members.filter((m) => m.role === "resident").length === 0 && (
-            <p className="note-info">Sakinleri davet etmek için daireye dokun ve <b>Davet bağlantısı oluştur</b>. Bağlantı 7 gün geçerli ve tek kullanımlık.</p>
+            <p className="note-info">Sakinleri davet etmek için <b>Toplu davet</b> ile tüm dairelerin bağlantılarını tek seferde al ya da bir daireye dokun. Bağlantılar 7 gün geçerli ve tek kullanımlık.</p>
+          )}
+          {d!.units.some((u) => !d!.members.some((m) => m.unit_id === u.id)) && (
+            <button className="btn btn-primary" onClick={() => setBulk(true)}>Toplu davet: boş dairelerin bağlantıları</button>
           )}
           <ul className="list">
             {d!.units.map((u) => {
@@ -55,7 +61,45 @@ export function Units() {
         </>
       )}
       <UnitSheet open={!!sel} unit={curUnit} isNew={sel === "new"} bid={bid} d={d} onClose={() => setSel(null)} onChanged={data.reload} />
+      <BulkInviteSheet open={bulk} bid={bid} building={b!.name} onClose={() => { setBulk(false); data.reload(); }} />
     </div>
+  );
+}
+
+type BulkRow = { unit_id: string; unit_label: string; token: string; expires_at: string };
+function BulkInviteSheet({ open, bid, building, onClose }: { open: boolean; bid: string; building: string; onClose: () => void }) {
+  const toast = useToast();
+  const data = useLoad(async () => {
+    if (!open) return [] as BulkRow[];
+    const rows = await rpc<BulkRow[]>("bulk_invites", { p_building: bid });
+    return rows.sort((a, b) => a.unit_label.localeCompare(b.unit_label, "tr", { numeric: true }));
+  }, [open, bid]);
+  const rows = data.data || [];
+  const all = rows.map((r) => `${r.unit_label}: ${inviteUrl(r.token)}`).join("\n");
+  const message = `${building} artık KOMŞUM'da! Aidat, kasa, duyuru ve arıza takibi tek yerde. Kendi dairenin bağlantısına dokunup katıl (7 gün geçerli):\n\n${all}`;
+  const copy = async (text: string, ok: string) => {
+    try { await navigator.clipboard.writeText(text); toast(ok); } catch { toast("Kopyalanamadı; metni basılı tutup kopyala.", "err"); }
+  };
+  return (
+    <Sheet open={open} onClose={onClose} title="Toplu davet">
+      {data.loading && !data.data ? <Loading /> : data.error ? <ErrorBox msg={data.error} retry={data.reload} /> : rows.length === 0 ? <Empty title="Tüm dairelerde sakin var" /> : (
+        <div className="stack">
+          <p className="muted small">{rows.length} boş daire için bağlantı hazır. Hepsini apartmanın WhatsApp grubuna tek mesajla gönderebilirsin; herkes kendi dairesinin bağlantısına dokunur.</p>
+          <div className="row-wrap">
+            <a className="btn btn-primary btn-sm" href={"https://wa.me/?text=" + encodeURIComponent(message)} target="_blank" rel="noopener">WhatsApp'ta gönder</a>
+            <button className="btn btn-ghost btn-sm" onClick={() => copy(message, "Davet mesajı kopyalandı.")}>Mesajı kopyala</button>
+          </div>
+          <ul className="list compact">
+            {rows.map((r) => (
+              <li key={r.unit_id}>
+                <div className="row-main"><b>{r.unit_label}</b><span className="small muted invite-url">{inviteUrl(r.token)}</span></div>
+                <button className="linkbtn small" onClick={() => copy(`${building} · ${r.unit_label} için KOMŞUM davetin: ${inviteUrl(r.token)} (7 gün geçerli)`, r.unit_label + " bağlantısı kopyalandı.")}>Kopyala</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </Sheet>
   );
 }
 
@@ -139,6 +183,7 @@ export function Settings() {
   const [ps, setPs] = useState<PushState | null>(null);
   const [transfer, setTransfer] = useState(false);
   const [newB, setNewB] = useState(false);
+  const [del, setDel] = useState(false);
   useEffect(() => { pushState().then(setPs); }, []);
   useEffect(() => { setBf({ name: b?.name || "", address: b?.address || "" }); }, [b?.building_id]);
 
@@ -183,6 +228,8 @@ export function Settings() {
         </section>
       )}
 
+      {isManager && b && <ExportSection bid={b.building_id} name={b.name} />}
+
       <section className="card stack">
         <h2>Profilim</h2>
         <form className="stack" onSubmit={async (e) => { e.preventDefault(); if (await run(() => rpc("save_profile", { p_full_name: name, p_phone: phone }), "Profil kaydedildi.")) refresh(); }}>
@@ -206,6 +253,11 @@ export function Settings() {
 
       {!isStandalone() && <p className="note-info">Telefonunda uygulama gibi kullanmak için: iPhone'da Safari <b>Paylaş → Ana Ekrana Ekle</b>, Android'de Chrome <b>⋮ → Uygulamayı yükle</b>.</p>}
       <button className="btn btn-ghost" onClick={() => auth.signOut()}>Çıkış yap</button>
+      <nav className="legal-links small">
+        <Link to="/kvkk">KVKK Aydınlatma Metni</Link><Link to="/gizlilik">Gizlilik</Link><Link to="/kullanim-sartlari">Kullanım Şartları</Link>
+      </nav>
+      <button className="linkbtn danger center-self" onClick={() => setDel(true)}>Hesabımı sil</button>
+      <DeleteAccountSheet open={del} onClose={() => setDel(false)} />
       <p className="small muted center">KOMŞUM · Apartmanda ne oluyor, herkes bilsin.</p>
 
       {b && <TransferSheet open={transfer} bid={b.building_id} onClose={() => setTransfer(false)} onDone={async () => { setTransfer(false); await refresh(); go("/"); }} />}
@@ -264,5 +316,84 @@ export function Inbox({ onSeen }: { onSeen: () => void }) {
         </ul>
       )}
     </div>
+  );
+}
+
+// ===================== Dışa aktarma =====================
+function ExportSection({ bid, name }: { bid: string; name: string }) {
+  const { busy, run } = useAction();
+  const base = slug(name) + "-" + istanbulToday();
+  const namesOf = async (ids: string[]) => {
+    const u = [...new Set(ids.filter(Boolean))];
+    const ps = u.length ? await from("profiles", "id,full_name").in("id", u) : [];
+    return Object.fromEntries((ps as any[]).map((p) => [p.id, p.full_name])) as Record<string, string>;
+  };
+  const exports: [string, string, () => Promise<void>][] = [
+    ["Kasa hareketleri", "Tüm giriş ve çıkışlar, iptaller ve düzeltmeler", async () => {
+      const rows = await from("ledger").eq("building_id", bid).order("effective_on").order("created_at").limit(10000);
+      const n = await namesOf(rows.map((r: any) => r.actor));
+      const SRC: Record<string, string> = { payment: "Aidat", expense: "Gider", cash_opening: "Başlangıç bakiyesi", cash_manual: "Kasa hareketi", cash_reversal: "Düzeltme" };
+      downloadCsv(`${base}-kasa.csv`, toCsv(["Tarih", "Tür", "Açıklama", "Giriş", "Çıkış", "Durum", "İşlemi yapan", "Kayıt zamanı"],
+        rows.map((r: any) => [r.effective_on, SRC[r.source] || r.source, r.description, r.direction === "in" ? Number(r.amount) : null, r.direction === "out" ? Number(r.amount) : null,
+          r.voided_at ? "İptal: " + (r.void_reason || "") : "", n[r.actor] || "", new Date(r.created_at).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" })])));
+    }],
+    ["Aidat durumu", "Her dairenin aylık borcu, ödenen ve kalan tutar", async () => {
+      const rows = await from("charge_status").eq("building_id", bid).isNull("cancelled_at").order("period").order("unit_label").limit(20000);
+      rows.sort((a: any, b: any) => a.period.localeCompare(b.period) || a.unit_label.localeCompare(b.unit_label, "tr", { numeric: true }));
+      downloadCsv(`${base}-aidatlar.csv`, toCsv(["Dönem", "Daire", "Borç", "Ödenen", "Kalan", "Son ödeme", "Durum"],
+        rows.map((r: any) => [r.period, r.unit_label, Number(r.amount), Number(r.paid), Number(r.remaining), r.due_date, STATUS_LABEL[r.status] || r.status])));
+    }],
+    ["Daireler ve sakinler", "Daire listesi, aidat tutarları, sakin adları ve telefonları", async () => {
+      const [units, ms] = await Promise.all([from("units").eq("building_id", bid).isNull("archived_at"), from("memberships").eq("building_id", bid).isNull("ended_at")]);
+      const ps = await from("profiles", "id,full_name,phone").in("id", (ms as any[]).map((m) => m.user_id).concat(["00000000-0000-0000-0000-000000000000"]));
+      const pm = Object.fromEntries((ps as any[]).map((p) => [p.id, p]));
+      (units as any[]).sort((a, b) => a.label.localeCompare(b.label, "tr", { numeric: true }));
+      const out: any[][] = [];
+      for (const u of units as any[]) {
+        const people = (ms as any[]).filter((m) => m.unit_id === u.id);
+        if (!people.length) out.push([u.label, Number(u.monthly_dues), u.due_day, "", "", ""]);
+        for (const m of people) out.push([u.label, Number(u.monthly_dues), u.due_day, pm[m.user_id]?.full_name || "", pm[m.user_id]?.phone || "", m.role === "manager" ? "Yönetici" : "Bina sakini"]);
+      }
+      downloadCsv(`${base}-daireler.csv`, toCsv(["Daire", "Aylık aidat", "Son ödeme günü", "Ad soyad", "Telefon", "Rol"], out));
+    }],
+  ];
+  return (
+    <section className="card stack">
+      <h2>Verileri Excel'e aktar</h2>
+      <p className="muted small">Dosyalar Excel ve Google E-Tablolar'da doğrudan açılır. Yedek almak ya da genel kurulda sunmak için kullanabilirsin.</p>
+      <ul className="list compact">
+        {exports.map(([t, sub, fn]) => (
+          <li key={t}><div className="row-main"><b>{t}</b><span className="small muted">{sub}</span></div>
+            <button className="btn btn-ghost btn-sm" disabled={busy} onClick={() => run(fn)}>İndir</button></li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+// ===================== Hesap silme =====================
+function DeleteAccountSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [txt, setTxt] = useState("");
+  const { busy, run } = useAction();
+  useEffect(() => { if (open) setTxt(""); }, [open]);
+  return (
+    <Sheet open={open} onClose={onClose} title="Hesabımı sil">
+      <form className="stack" onSubmit={async (e) => {
+        e.preventDefault();
+        const ok = await run(async () => { try { await disablePush(); } catch {} return serverPost("/api/delete-account"); });
+        if (ok) { try { localStorage.clear(); } catch {} forgetSession(); location.href = "/"; }
+      }}>
+        <p>Hesabını silersen:</p>
+        <ul className="plain">
+          <li>Adın, telefonun ve bildirimlerin silinir, giriş hesabın kapatılır.</li>
+          <li>Üye olduğun apartmanlardan çıkarılırsın.</li>
+          <li>Apartmanın muhasebe kayıtları (ödemeler, giderler, kasa) yasal yükümlülükler nedeniyle "Silinmiş kullanıcı" adıyla kalır.</li>
+          <li>Yöneticiysen ve apartmanda başka üye varsa, önce yönetimi devretmen gerekir.</li>
+        </ul>
+        <p className="note-warn">Bu işlem geri alınamaz.</p>
+        <Field label="Onaylamak için SİL yaz"><input id="del-confirm" value={txt} onChange={(e) => setTxt(e.target.value)} autoComplete="off" /></Field>
+        <button className="btn btn-danger btn-lg" disabled={busy || txt.trim().toLocaleUpperCase("tr") !== "SİL"}>{busy ? "Siliniyor…" : "Hesabımı kalıcı olarak sil"}</button>
+      </form>
+    </Sheet>
   );
 }

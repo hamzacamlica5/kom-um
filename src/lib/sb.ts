@@ -191,4 +191,18 @@ export async function fileUrl(path: string): Promise<string> {
   return cfg().supabaseUrl + (signed.startsWith("/storage/v1") ? signed : "/storage/v1" + signed);
 }
 
+// Uygulamanın kendi sunucu fonksiyonları (/api/...), oturumla birlikte
+export async function serverPost<T = any>(path: string, body: any = {}): Promise<T> {
+  await ensureFresh();
+  let res: Response;
+  try {
+    res = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + (session?.access_token || "") }, body: JSON.stringify(body) });
+  } catch { throw new ApiError(friendly(0, null), 0); }
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new ApiError(j.message || "Bir şeyler ters gitti. Tekrar dene.", res.status);
+  return j;
+}
+
+export function forgetSession() { setSession(null); }
+
 export const config = cfg;

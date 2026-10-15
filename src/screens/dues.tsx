@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { from, rpc, upload, fileUrl } from "../lib/sb";
 import { tl, currentPeriod, shiftPeriod, periodName, dateTR, istanbulToday, parseAmount } from "../lib/format";
-import { useApp } from "../state";
+import { useApp, Link } from "../state";
 import { Badge, Empty, ErrorBox, Field, FilePick, Loading, Money, PageHead, ReasonSheet, Segmented, Sheet, useAction, useLoad, useToast } from "../ui";
 
 type Charge = { id: string; unit_id: string; unit_label: string; period: string; period_id: string; amount: number; due_date: string; paid: number; remaining: number; pending: number; status: string };
@@ -234,6 +234,7 @@ function ResidentDues() {
             <b>{tl(debt)}</b>
             {debt > 0 && <small>Parayı banka hesabına gönderdikten sonra dekontunu buradan bildir. Yönetici onaylayınca borcun düşer.</small>}
           </section>
+          <Link to="/nereye" className="todo whereto"><b>Aidatım nereye gitti?</b><span>Ödediğin aidatın hangi giderlere harcandığını gör.</span></Link>
           <h2 className="h-sec">Borçlar</h2>
           <ul className="list">
             {d!.charges.map((c) => (

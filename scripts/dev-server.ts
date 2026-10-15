@@ -147,6 +147,13 @@ Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
     if (url.pathname.startsWith("/sb/")) return supabase(req, url.pathname.slice(3));
+    if (url.pathname === "/api/delete-account" && req.method === "POST") {
+      const u = userFrom(req);
+      if (!u) return json({ message: "Oturum bulunamadı." }, 401);
+      try { await asUser(u, "select public.prepare_account_deletion()"); } catch (e: any) { return json({ message: String(e.message) }, 400); }
+      await sql.unsafe(`update auth.users set email = 'silindi-' || id where id = ${lit(u.sub)}`);
+      return json({ ok: true });
+    }
     if (url.pathname === "/api/config") {
       return new Response(`window.KOMSUM=${JSON.stringify({ supabaseUrl: url.origin + "/sb", supabaseKey: "dev", vapidPublicKey: "" })};`, { headers: { "Content-Type": "application/javascript" } });
     }

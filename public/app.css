@@ -242,3 +242,28 @@ textarea { resize: vertical; }
 .toast-err { background: var(--neg); color: #fff; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 @media (max-width: 380px) { .grid2 { grid-template-columns: 1fr; } .stats3 b { font-size: .9rem; } }
+
+/* ---------- aidat dağılımı ---------- */
+.breakdown { flex-direction: row; align-items: center; gap: 16px; flex-wrap: wrap; }
+.donut { width: 170px; height: 170px; flex: none; margin: 0 auto; }
+.donut-big { font: 800 20px var(--font); fill: var(--ink); }
+.donut-sub { font: 600 11px var(--font); fill: var(--muted); }
+.bd-head { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 6px; }
+.bd-list li { align-items: flex-start; }
+.swatch { width: 12px; height: 12px; border-radius: 4px; flex: none; margin-top: 5px; }
+.bar { display: block; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; margin: 4px 0 2px; }
+.bar span { display: block; height: 100%; border-radius: 3px; }
+.todo.whereto { background: var(--brand-soft); border-color: transparent; }
+.todo.whereto b::after { content: " →"; }
+.invite-url { overflow-wrap: anywhere; }
+ul.plain { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.center-self { align-self: center; }
+.legal-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+/* ---------- yasal sayfalar ---------- */
+.legal { min-height: 100dvh; background: var(--bg); }
+.legal-top { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px; background: var(--bg); border-bottom: 1px solid var(--line); }
+.legal-body { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; display: flex; flex-direction: column; gap: 12px; line-height: 1.6; }
+.legal-body h2 { margin-top: 12px; font-size: 1.05rem; }
+.legal-body ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.legal-nav { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); font-size: .9rem; }

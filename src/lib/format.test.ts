@@ -36,3 +36,12 @@ test("dönem işlemleri", () => {
   expect(currentPeriod(new Date("2026-10-31T22:30:00Z"))).toBe("2026-11");
   expect(istanbulToday(new Date("2026-10-31T20:59:00Z"))).toBe("2026-10-31");
 });
+
+import { toCsv, slug } from "./csv";
+test("Excel uyumlu CSV", () => {
+  const c = toCsv(["Ad", "Tutar"], [["Daire 1", 750.5], ['Not; "özel"', null]]);
+  expect(c.startsWith("﻿")).toBe(true);
+  expect(c).toContain("Ad;Tutar\r\nDaire 1;750,5\r\n");
+  expect(c).toContain('"Not; ""özel""";');
+  expect(slug("Lale Apartmanı Şık Gül")).toBe("lale-apartmani-sik-gul");
+});

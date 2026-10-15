@@ -99,8 +99,17 @@ Ardından Supabase → **Authentication → URL Configuration** → **Site URL**
 - **Güvenlik:** Para ve rol içeren her işlem veritabanındaki kurallardan geçer. Sakin yalnızca kendi dairesinin borcunu ve dekontunu görür; kasa ve giderler tüm sakinlere açıktır.
 - **Ücretsiz sınırlar:** Supabase ücretsiz planı 500 MB veritabanı ve 1 GB dosya alanı verir; bir hafta hiç kullanılmayan proje duraklatılır (panelden tek tıkla açılır). Gerçek apartmanlarla kullanmaya başlayınca Supabase Pro'ya (aylık 25 $) geçmek iyi olur.
 
+## Güncellemeler
+
+Veritabanını değiştiren her güncelleme `supabase/guncellemeler/` klasörüne tarihli bir dosya olarak eklenir. Supabase → SQL Editor'de o dosyayı bir kez çalıştırman yeterli. `schema.sql` her zaman en güncel halin tamamıdır; sıfırdan kurulumda yalnızca onu çalıştır.
+
+## Yayından önce
+
+- `src/screens/legal.tsx` başındaki `LEGAL` bilgilerini (veri sorumlusunun adı/unvanı, adres, e-posta) doldur.
+- Yasal metinler taslaktır; ücretli kullanıma geçmeden önce bir avukata kontrol ettir.
+
 ## Geliştirme (Claude için not)
 
 - `bun scripts/build.ts` → `dist/` klasörünü üretir. Vercel derleme yapmaz, `dist/` olduğu gibi yayınlanır; kod değişince yeniden derleyip `dist/` ile birlikte gönder.
 - `bun scripts/dev-server.ts` → yerel Postgres üzerinde Supabase taklidiyle çalışır (giriş kodu `123456`).
-- `bash supabase/tests/run.sh` → veritabanı kurallarının testleri. `bun test` → istemci ve bildirim gönderici testleri. `node scripts/e2e.mjs` → tarayıcıda uçtan uca senaryo.
+- `bash supabase/tests/run.sh` → veritabanı kurallarının testleri. `bun test` → istemci ve bildirim gönderici testleri. `node scripts/e2e.mjs` ve `node scripts/e2e-2.mjs` → tarayıcıda uçtan uca senaryolar.
