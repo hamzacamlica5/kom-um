@@ -1,5 +1,5 @@
 // KOMŞUM servis çalışanı: uygulama kabuğunu önbellekler, telefon bildirimlerini gösterir.
-const VERSION = "4c31c58e3d";
+const VERSION = "09dc76fc0c";
 const CACHE = "komsum-" + VERSION;
 const SHELL = ["/", "/app.js?v=" + VERSION, "/app.css?v=" + VERSION, "/api/config", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/badge-72.png"];
 

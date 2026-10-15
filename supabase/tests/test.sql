@@ -317,4 +317,27 @@ select t_expect_err($q$select prepare_account_deletion()$q$, 'yönetimi bir saki
 select t_eq((select count(*)::int from bulk_invites(:'b2')), 3, 'toplu davet: dolu daire atlanır, hesabı silinenin dairesi tekrar boş');
 reset role;
 \o
+
+-- ---------- 14. Bina acil rehberi ----------
+\o /dev/null
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000e1"}', false);
+set role authenticated;
+select save_emergency_info(:'b2', '{"water_valve":"Bodrum kat, kazan dairesi kapısının solu","elevator_company":"ABC Asansör","elevator_phone":"0212 000 00 00","gathering_area":"Moda Parkı","notes":"  "}');
+select t_eq((select water_valve from building_emergency where building_id = :'b2'), 'Bodrum kat, kazan dairesi kapısının solu', 'acil rehber kaydedildi');
+select t_eq((select notes from building_emergency where building_id = :'b2'), null, 'boş alan null kaydedilir');
+select save_emergency_info(:'b2', '{"water_valve":"Bodrum kat","gathering_area":"Moda Parkı"}');
+select t_eq((select elevator_company from building_emergency where building_id = :'b2'), null, 'güncelleme tüm alanları yeniler');
+reset role;
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000e3"}', false);
+set role authenticated;
+select t_eq((select gathering_area from building_emergency where building_id = :'b2'), 'Moda Parkı', 'sakin acil rehberi görür');
+select t_eq((select full_name from building_managers(:'b2')), 'Yönetici İki', 'sakin yöneticiyi görür');
+select t_expect_err(format($q$select save_emergency_info(%L, '{}')$q$, :'b2'), 'yalnızca yönetici');
+reset role;
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-00000000000d"}', false);
+set role authenticated;
+select t_eq((select count(*)::int from building_emergency), 0, 'yabancı acil rehberi görmez');
+select t_eq((select count(*)::int from building_managers(:'b2')), 0, 'yabancı yöneticiyi görmez');
+reset role;
+\o
 \echo 'TÜM TESTLER GEÇTİ'

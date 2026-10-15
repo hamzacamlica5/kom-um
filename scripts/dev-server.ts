@@ -15,6 +15,7 @@ const lit = (v: any): string => {
   if (v === null || v === undefined) return "NULL";
   if (typeof v === "number") return String(v);
   if (typeof v === "boolean") return v ? "true" : "false";
+  if (typeof v === "object") return "'" + JSON.stringify(v).replace(/'/g, "''") + "'";
   return "'" + String(v).replace(/'/g, "''") + "'";
 };
 const ident = (s: string) => { if (!/^[a-z_][a-z0-9_]*$/.test(s)) throw new Error("geçersiz ad " + s); return '"' + s + '"'; };

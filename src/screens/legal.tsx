@@ -19,6 +19,7 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
         <p className="muted small">Son güncelleme: {LEGAL.updated}</p>
         {children}
         <nav className="legal-nav">
+          <Link to="/guven">Güven Merkezi</Link>
           <Link to="/kvkk">KVKK Aydınlatma Metni</Link>
           <Link to="/gizlilik">Gizlilik Politikası</Link>
           <Link to="/kullanim-sartlari">Kullanım Şartları</Link>
@@ -98,6 +99,7 @@ export function Privacy() {
       <h2>Sponsorlu hizmet önerileri</h2>
       <p>Bakım, arıza ve temizlik gibi bölümlerde, apartmanların ihtiyaç duyabileceği hizmet firmaları (asansör bakımı, temizlik, tesisat vb.) <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Bu firmalar KOMŞUM'a listeleme ücreti öder.</p>
       <ul>
+        <li>Sponsorlu öneriler yalnızca yöneticilere gösterilir. Bina sakinleri uygulamada hiçbir sponsorlu içerik görmez.</li>
         <li>Öneriler yalnızca apartmanın bulunduğu il ve ilçeye göre seçilir; senin kişisel verilerin bu seçimde kullanılmaz.</li>
         <li>Firmalar kimin uygulamayı kullandığını göremez; hiçbir bilgin firmalarla kendiliğinden paylaşılmaz.</li>
         <li>Bir firmadan teklif istediğinde, yalnızca senin onayınla ve yalnızca teklif için gereken bilgiler (adın, telefonun, apartmanın adresi ve talebin) o firmaya iletilir.</li>
@@ -132,7 +134,14 @@ export function Terms() {
       <h2>5. Ücretlendirme</h2>
       <p>Bina sakinleri KOMŞUM'u ücretsiz kullanır. Apartman için abonelik ücreti, uygulamada ve web sitesinde duyurulan güncel tarifeye göre yönetimden alınır. Pilot dönemde hizmet ücretsiz sunulabilir. Ücretli döneme geçişten önce yöneticiler bilgilendirilir.</p>
       <h2>6. Sponsorlu içerik ve hizmet firmaları</h2>
-      <p>Uygulamada bazı hizmet firmaları ücret karşılığında, belirli süreler için ve <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Sponsorlu içerik, uygulamanın diğer işlevlerini, kayıtları ya da sıralamaları etkilemez.</p>
+      <p>Uygulamada bazı hizmet firmaları ücret karşılığında, belirli süreler için ve <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Sponsorlu içerik şu kurallara tabidir:</p>
+      <ul>
+        <li>Yalnızca yöneticilere gösterilir; bina sakinleri sponsorlu içerik görmez.</li>
+        <li>Bir ekranda en fazla iki sponsorlu firma yer alır ve her birinde "Bu firmayı neden görüyorum?" açıklaması bulunur.</li>
+        <li>Firmalar listelenmeden önce vergi kaydı ve ilgili mesleki yetki belgeleri (örneğin asansör bakımında yasal yetki belgesi) yönünden kontrol edilir.</li>
+        <li>Yöneticiler hizmet aldıkları firmayı puanlayabilir. Düşük puan alan ya da şikâyet üzerine uygunsuz bulunan firma, ödeme yapmış olsa bile listeden kaldırılır.</li>
+        <li>Sponsorlu içerik; kayıtları, hesaplamaları ya da uygulamanın diğer işlevlerini hiçbir şekilde etkilemez.</li>
+      </ul>
       <p>KOMŞUM, apartman ile hizmet firmaları arasındaki anlaşmaların tarafı değildir. Firmaların hizmet kalitesini, fiyatını ve yasal yükümlülüklerini garanti etmez. Hizmet almadan önce firmanın yetki belgelerini ve tekliflerini kontrol etmek yönetimin sorumluluğundadır. Uygunsuz davranan bir firmayı bize bildirebilirsin; inceleme sonucunda listeden kaldırılabilir.</p>
 
       <h2>7. Yasak kullanım</h2>
@@ -147,6 +156,36 @@ export function Terms() {
       <p>Bu şartlar güncellenebilir; önemli değişiklikler uygulama içinde duyurulur. Bu şartlara Türkiye Cumhuriyeti hukuku uygulanır.</p>
       <h2>İletişim</h2>
       <p>{LEGAL.owner} · {LEGAL.email}</p>
+    </Shell>
+  );
+}
+
+const PROMISES: [string, string][] = [
+  ["Verilerin satılmaz", "Kişisel verilerini kimseye satmayız, reklam ağlarıyla paylaşmayız, seni takip etmeyiz."],
+  ["Para kayıtları silinemez", "Aidat, ödeme, gider ve kasa hareketleri silinmez. Yanlış kayıt, gerekçesi yazılarak iptal edilir ya da ters kayıtla düzeltilir; bu geçmiş herkese açıktır."],
+  ["Kasa herkese açık", "Apartmanın kasası, giderleri ve faturaları tüm sakinler tarafından görülebilir. Aidatın nereye harcandığını kendin görürsün."],
+  ["Borcun sadece seni ilgilendirir", "Bir dairenin borcu, ödemeleri ve dekontları yalnızca o dairenin sakinlerine ve yönetime görünür. Bu kural veritabanı düzeyinde uygulanır, ekran arkasından aşılamaz."],
+  ["Sakinler reklam görmez", "Sakinlerin ekranında hiçbir reklam ya da sponsorlu içerik yoktur. Yöneticilere gösterilen sponsorlu hizmet önerileri açıkça etiketlenir, kontrol edilmiş firmalardan oluşur ve kişisel verine dayanmaz."],
+  ["Verilerin senin", "Yönetici tüm kayıtları istediği an Excel'e aktarabilir. Herkes hesabını tek dokunuşla silebilir."],
+  ["Yönetici değişir, kayıtlar kaybolmaz", "Yönetici değiştiğinde kasa, borçlar, belgeler ve bakım geçmişi tek tuşla yeni yöneticiye geçer. \"Excel eski yöneticideydi\" dönemi biter."],
+  ["Acil durumda yanında", "112 ve arıza hatları, binanın vana ve pano yerleri, asansör firmasının acil hattı tek ekranda; internet olmasa bile açılır."],
+];
+
+export function Trust() {
+  return (
+    <Shell title="Güven Merkezi">
+      <p className="lead">KOMŞUM'a apartmanının parasını ve komşularının bilgilerini emanet ediyorsun. Bu emanete nasıl baktığımızı açıkça yazıyoruz.</p>
+      <div className="promises">
+        {PROMISES.map(([t, d]) => <section key={t} className="promise"><h2>{t}</h2><p>{d}</p></section>)}
+      </div>
+      <h2>Teknik olarak</h2>
+      <ul>
+        <li>Tüm bağlantılar şifrelidir (HTTPS). Veriler Avrupa Birliği'ndeki sunucularda saklanır.</li>
+        <li>Erişim kuralları uygulamada değil, doğrudan veritabanında uygulanır ve her güncellemede otomatik testlerle denetlenir.</li>
+        <li>Dosyalar (dekont, fatura, fotoğraf) herkese açık bir adreste durmaz; yalnızca yetkili kişiye kısa süreli bağlantıyla açılır.</li>
+        <li>Giriş şifresizdir: her girişte e-postana tek kullanımlık kod gelir. Çalınacak bir şifre yoktur.</li>
+      </ul>
+      <p>Bir sorun ya da önerin varsa {LEGAL.email} adresine yaz.</p>
     </Shell>
   );
 }

@@ -112,4 +112,4 @@ Veritabanını değiştiren her güncelleme `supabase/guncellemeler/` klasörün
 
 - `bun scripts/build.ts` → `dist/` klasörünü üretir. Vercel derleme yapmaz, `dist/` olduğu gibi yayınlanır; kod değişince yeniden derleyip `dist/` ile birlikte gönder.
 - `bun scripts/dev-server.ts` → yerel Postgres üzerinde Supabase taklidiyle çalışır (giriş kodu `123456`).
-- `bash supabase/tests/run.sh` → veritabanı kurallarının testleri. `bun test` → istemci ve bildirim gönderici testleri. `node scripts/e2e.mjs` ve `node scripts/e2e-2.mjs` → tarayıcıda uçtan uca senaryolar.
+- `bash supabase/tests/run.sh` → veritabanı kurallarının testleri. `bun test` → istemci ve bildirim gönderici testleri. `node scripts/e2e.mjs`, `e2e-2.mjs` ve `e2e-3.mjs` → tarayıcıda uçtan uca senaryolar.

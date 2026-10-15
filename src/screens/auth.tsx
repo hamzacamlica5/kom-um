@@ -40,7 +40,7 @@ export function Login() {
             </Field>
             <button className="btn btn-primary btn-lg" disabled={busy}>{busy ? "Gönderiliyor…" : "Giriş kodu gönder"}</button>
             <p className="muted small">Şifre yok. E-postana gelen kodla giriş yaparsın; hesabın yoksa otomatik açılır.</p>
-            <p className="muted small">Devam ederek <Link to="/kullanim-sartlari">Kullanım Şartları</Link>'nı kabul etmiş ve <Link to="/kvkk">KVKK Aydınlatma Metni</Link>'ni okumuş olursun.</p>
+            <p className="muted small">Devam ederek <Link to="/kullanim-sartlari">Kullanım Şartları</Link>'nı kabul etmiş ve <Link to="/kvkk">KVKK Aydınlatma Metni</Link>'ni okumuş olursun. <Link to="/guven">Güven Merkezi</Link></p>
           </form>
         ) : (
           <form className="stack" onSubmit={async (e) => {

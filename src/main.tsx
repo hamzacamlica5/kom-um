@@ -10,7 +10,8 @@ import { Cash } from "./screens/cash";
 import { Announcements, Requests, Documents } from "./screens/board";
 import { Units, Settings, Inbox } from "./screens/manage";
 import { Breakdown } from "./screens/breakdown";
-import { Kvkk, Privacy, Terms } from "./screens/legal";
+import { Kvkk, Privacy, Terms, Trust } from "./screens/legal";
+import { Emergency } from "./screens/emergency";
 
 const I = {
   home: <path d="M3 11.5 12 4l9 7.5M5.5 9.8V20h13V9.8" />,
@@ -70,6 +71,7 @@ function Shell() {
     case "/bildirim-kutusu": page = <Inbox onSeen={() => setUnread(0)} />; break;
     case "/menu": page = <Menu notices={notices} />; break;
     case "/nereye": page = <Breakdown />; break;
+    case "/acil": page = <Emergency />; break;
     default: page = <Home />;
   }
 
@@ -78,6 +80,7 @@ function Shell() {
       <header className="topbar">
         <Link to="/" className="topbar-brand"><Brand small /></Link>
         <span className="topbar-b">{b?.name}</span>
+        <Link to="/acil" className="sos" ><span>Acil</span></Link>
         <Link to="/bildirim-kutusu" className="iconbtn bell"><Icon d={I.bell} />{unread > 0 && <i className="dot">{unread > 9 ? "9+" : unread}</i>}<span className="sr">Bildirimler</span></Link>
       </header>
       <main key={b?.building_id + path}>{page}</main>
@@ -124,6 +127,7 @@ function Root() {
     }
   }, [userId, profile, invite]);
 
+  if (path === "/guven") return <Trust />;
   if (path === "/kvkk") return <Kvkk />;
   if (path === "/gizlilik") return <Privacy />;
   if (path === "/kullanim-sartlari") return <Terms />;
