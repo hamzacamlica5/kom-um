@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8">
+<style>
+  :root { --brand:#1D5C4F; --deep:#0F3A31; --accent:#E3A535; --ink:#F4FAF6; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--deep); font-family: "Inter", sans-serif; }
+  #stage { position: absolute; inset: 0; overflow: hidden;
+    background: radial-gradient(1200px 900px at 78% 45%, #2A7A68 0%, #1D5C4F 38%, #12443A 70%, #0C3029 100%); }
+  .ring { position: absolute; border-radius: 50%; border: 2px solid rgba(244,250,246,.07); }
+  .disc { position: absolute; border-radius: 50%; background: rgba(244,250,246,.045); }
+  .grain { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 6px 6px; }
+
+  .copy { position: absolute; left: 150px; top: 0; width: 860px; height: 1080px; display: flex; flex-direction: column; justify-content: center; gap: 26px; }
+  .scene-copy { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 26px; }
+  .eyebrow { font: 700 26px "Inter"; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; display: flex; align-items: center; gap: 16px; }
+  .eyebrow::before { content: ""; width: 54px; height: 4px; border-radius: 2px; background: var(--accent); }
+  .h { font: 800 104px/1.0 "Inter Display", "Inter"; color: var(--ink); letter-spacing: -.025em; }
+  .sub { font: 400 36px/1.35 "Inter"; color: rgba(244,250,246,.82); max-width: 780px; }
+  .sub b { color: var(--ink); font-weight: 650; }
+
+  .phone { position: absolute; width: 438px; height: 914px; border-radius: 66px; background: #0B0F0E;
+    box-shadow: 0 0 0 2px #2b3431, 0 40px 90px rgba(0,0,0,.45), 0 12px 30px rgba(0,0,0,.35); }
+  .phone::after { content: ""; position: absolute; left: 50%; top: 26px; width: 118px; height: 34px; margin-left: -59px; border-radius: 20px; background: #0B0F0E; z-index: 5; }
+  .screen { position: absolute; left: 14px; top: 14px; width: 410px; height: 886px; border-radius: 54px; overflow: hidden; background: #F3F5F2; }
+  .layer { position: absolute; left: 0; top: 0; width: 390px; height: 844px; transform-origin: 0 0; overflow: hidden; background: #F3F5F2; }
+  .layer img.full { position: absolute; left: 0; top: 0; width: 390px; }
+  .layer .ov { position: absolute; left: 0; width: 390px; background-size: 390px 844px; background-repeat: no-repeat; }
+  .layer .ov.top { top: 0; height: 61px; background-position: 0 0; }
+  .layer .ov.bot { bottom: 0; height: 68px; background-position: 0 100%; }
+  .tap { position: absolute; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 5px solid rgba(227,165,53,.95); background: rgba(227,165,53,.25); z-index: 4; }
+
+  .logo { position: absolute; display: flex; align-items: center; gap: 30px; }
+  .logo svg { width: 150px; height: 150px; }
+  .logo span { font: 800 150px "Inter Display"; color: var(--ink); letter-spacing: .04em; }
+  .tagline { position: absolute; font: 500 46px "Inter"; color: rgba(244,250,246,.88); }
+  .chips { position: absolute; left: 0; right: 0; display: flex; justify-content: center; gap: 18px; }
+  .chip { font: 650 30px "Inter"; color: var(--ink); padding: 14px 28px; border-radius: 999px; background: rgba(244,250,246,.1); border: 1.5px solid rgba(244,250,246,.18); }
+  .chip.acc { background: var(--accent); color: #1A2620; border-color: transparent; }
+  .url { position: absolute; left: 50%; font: 700 40px "Inter"; color: #1A2620; background: var(--ink); padding: 18px 44px; border-radius: 999px; transform: translateX(-50%); }
+  .note { position: absolute; left: 0; right: 0; text-align: center; font: 500 30px "Inter"; color: rgba(244,250,246,.75); }
+</style></head>
+<body><div id="stage">
+  <div class="disc" id="d1" style="width:1100px;height:1100px"></div>
+  <div class="ring" id="r1" style="width:1500px;height:1500px"></div>
+  <div class="ring" id="r2" style="width:900px;height:900px"></div>
+  <div class="disc" id="d2" style="width:520px;height:520px"></div>
+  <div class="grain"></div>
+
+  <div class="copy" id="copy"></div>
+  <div id="phones"></div>
+
+  <div class="logo" id="logo">
+    <svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="32" rx="4" fill="#F4FAF6"/><path d="M4 14 24 3l20 11" fill="none" stroke="#F4FAF6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><g fill="#1D5C4F"><rect x="12" y="17" width="7" height="6" rx="1.5"/><rect x="29" y="17" width="7" height="6" rx="1.5"/><rect x="12" y="28" width="7" height="6" rx="1.5"/><rect x="20.5" y="30" width="7" height="12" rx="1.5"/><rect x="29" y="28" width="7" height="6" rx="1.5" fill="#E3A535"/></g></svg>
+    <span>KOMŞUM</span>
+  </div>
+  <div class="tagline" id="tagline">Apartmanda ne oluyor, herkes bilsin.</div>
+  <div class="chips" id="chips"></div>
+  <div class="tagline" id="outro1" style="font:800 64px 'Inter Display';color:#F4FAF6">Apartmanını telefondan, şeffafça yönet.</div>
+  <div class="note" id="outro2">Bina sakinleri için ücretsiz · Telefona uygulama olarak kurulur</div>
+  <div class="url" id="url">kom-um.vercel.app</div>
+</div>
+<script>
+const S = "shots/";
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const out = (x) => 1 - Math.pow(1 - clamp(x), 3);
+const back = (x) => { x = clamp(x); const c = 1.4; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const $ = (id) => document.getElementById(id);
+
+// ---- ekranlar ----
+const SCREENS = {
+  home:  { img: "m-home.png", full: "m-home-full.png", h: 3642 / 3 },
+  kasa:  { img: "m-kasa.png", full: "m-kasa-full.png", h: 20568 / 3 },
+  nereye:{ img: "r-nereye.png", full: "r-nereye-full.png", h: 4542 / 3 },
+  bildirim: { img: "m-bildirim.png" },
+  acil:  { img: "r-acil.png", full: "r-acil-full.png", h: 5394 / 3 },
+  aidat: { img: "m-aidat.png", full: "m-aidat-full.png", h: 4950 / 3 },
+  rhome: { img: "r-home.png" },
+};
+function makeLayer(key) {
+  const s = SCREENS[key], d = document.createElement("div");
+  d.className = "layer";
+  if (s.full) {
+    d.innerHTML = `<img class="full" src="${S + s.full}"><div class="ov top" style="background-image:url(${S + s.img})"></div><div class="ov bot" style="background-image:url(${S + s.img})"></div>`;
+  } else d.innerHTML = `<img class="full" src="${S + s.img}">`;
+  return d;
+}
+function makePhone(id) {
+  const p = document.createElement("div"); p.className = "phone"; p.id = id;
+  p.innerHTML = `<div class="screen"></div>`;
+  $("phones").appendChild(p);
+  return p;
+}
+// Ana telefon ve sahne ekranları
+const main = makePhone("main");
+const mainLayers = {};
+for (const k of ["home", "kasa", "nereye", "bildirim", "acil"]) { const l = makeLayer(k); mainLayers[k] = l; main.querySelector(".screen").appendChild(l); }
+const tap = document.createElement("div"); tap.className = "tap"; main.querySelector(".screen").appendChild(tap);
+const sideL = makePhone("sideL"), sideR = makePhone("sideR");
+sideL.querySelector(".screen").appendChild(makeLayer("aidat"));
+sideR.querySelector(".screen").appendChild(makeLayer("rhome"));
+const SCALE_IN = 410 / 390;
+document.querySelectorAll(".layer").forEach((l) => (l.style.transform = `scale(${SCALE_IN})`));
+
+// ---- metin sahneleri ----
+const SCENES = [
+  { a: 3.2, b: 7.7, key: "kasa", eyebrow: "Şeffaflık", h: "Kasa herkese<br>açık.", sub: "Aidat, gider ve kasa hareketleri <b>tek yerde</b>. Hiçbir kayıt silinmez; düzeltmeler bile gerekçesiyle görünür.", scroll: [0, 760] },
+  { a: 7.7, b: 12.1, key: "nereye", eyebrow: "Aidat", h: "Aidatın nereye<br>gitti?", sub: "Giderler kalem kalem. Her sakin, <b>kendi dairesine düşen payı</b> görür.", scroll: [0, 520] },
+  { a: 12.1, b: 16.2, key: "bildirim", eyebrow: "Ödeme", h: "Dekontla öde,<br>tek dokunuşla onay.", sub: "Sakin dekontunu gönderir, yönetici onaylar; <b>borç düşer, kasa güncellenir.</b>" },
+  { a: 16.2, b: 20.6, key: "acil", eyebrow: "Güvenlik", h: "Acil durumda<br>yanında.", sub: "112, arıza hatları, <b>vana ve pano yerleri</b>, asansörün acil hattı. İnternet olmasa da açılır.", scroll: [0, 640] },
+];
+for (const sc of SCENES) {
+  const el = document.createElement("div"); el.className = "scene-copy";
+  el.innerHTML = `<div class="eyebrow">${sc.eyebrow}</div><div class="h">${sc.h}</div><div class="sub">${sc.sub}</div>`;
+  $("copy").appendChild(el); sc.el = el;
+}
+for (const [t, acc] of [["Aidat", 0], ["Kasa", 0], ["Dekont onayı", 0], ["Duyuru", 0], ["Arıza", 0], ["Evrak", 0], ["Acil durum", 1]]) {
+  const c = document.createElement("div"); c.className = "chip" + (acc ? " acc" : ""); c.textContent = t; $("chips").appendChild(c);
+}
+
+const DUR = 28;
+function render(t) {
+  // arka plan
+  $("d1").style.transform = `translate(${1180 + 40 * Math.sin(t / 4)}px, ${-120 + 30 * Math.cos(t / 5)}px)`;
+  $("r1").style.transform = `translate(${780 + 30 * Math.cos(t / 6)}px, ${-260 + 20 * Math.sin(t / 7)}px)`;
+  $("r2").style.transform = `translate(${-300 + 20 * Math.sin(t / 5)}px, ${560 + 20 * Math.cos(t / 4)}px)`;
+  $("d2").style.transform = `translate(${1500 + 25 * Math.cos(t / 3)}px, ${720 + 25 * Math.sin(t / 4)}px)`;
+
+  // açılış logosu
+  const lgIn = back(prog(t, 0.2, 1.0)), lgMove = ease(prog(t, 2.4, 3.2));
+  const logo = $("logo");
+  logo.style.opacity = clamp(prog(t, 0.2, 0.7)) * (1 - prog(t, 2.7, 3.15));
+  logo.style.left = (150 - 0 * lgMove) + "px"; logo.style.top = (360 - 60 * lgMove) + "px";
+  logo.style.transform = `scale(${0.85 + 0.15 * lgIn})`; logo.style.transformOrigin = "0 50%";
+  const tg = $("tagline");
+  tg.style.left = "160px"; tg.style.top = (560 + 30 * (1 - out(prog(t, 0.9, 1.6)))) + "px";
+  tg.style.opacity = prog(t, 0.9, 1.6) * (1 - prog(t, 2.7, 3.15));
+
+  // ana telefon konumu
+  let px = 1300, py = 83, ps = 1, pr = 0;
+  const enter = out(prog(t, 1.0, 2.2));
+  px = 1300 + 700 * (1 - enter); pr = 8 * (1 - enter);
+  // kapanış öncesi ortaya geçiş
+  const toCenter = ease(prog(t, 20.6, 21.6));
+  px = px + (741 - px) * toCenter; py = py + (-31 - py) * toCenter; ps = 1 - 0.2 * toCenter;
+  const fadeOut = prog(t, 24.0, 24.7);
+  main.style.transform = `translate(${px}px, ${py + 60 * fadeOut}px) rotate(${pr}deg) scale(${ps})`;
+  main.style.transformOrigin = "50% 50%";
+  main.style.opacity = 1 - fadeOut;
+
+  // ekran katmanları
+  const order = ["home", ...SCENES.map((s) => s.key)];
+  const starts = { home: -1, ...Object.fromEntries(SCENES.map((s) => [s.key, s.a])) };
+  for (const k of order) {
+    const l = mainLayers[k], st = starts[k];
+    const p = k === "home" ? 1 : out(prog(t, st + 0.05, st + 0.65));
+    l.style.display = (k === "home" || t >= st) ? "block" : "none";
+    l.style.transform = `translateY(${(1 - p) * 844 * SCALE_IN}px) scale(${SCALE_IN})`;
+    l.style.zIndex = order.indexOf(k) + 1;
+    const sc = SCENES.find((s) => s.key === k);
+    if (sc && sc.scroll && SCREENS[k].full) {
+      const sp = ease(prog(t, sc.a + 1.0, sc.b - 0.4));
+      const s = sc.scroll[0] + (sc.scroll[1] - sc.scroll[0]) * sp;
+      l.querySelector("img.full").style.transform = `translateY(${-Math.min(s, SCREENS[k].h - 844)}px)`;
+    }
+  }
+  // dokunma efekti (Onayla düğmesi)
+  const tp = prog(t, 13.9, 14.7);
+  tap.style.display = tp > 0 && tp < 1 ? "block" : "none";
+  tap.style.left = (207 + 36) * SCALE_IN + "px"; tap.style.top = (318 + 18) * SCALE_IN + "px";
+  tap.style.transform = `scale(${0.5 + 0.9 * out(tp)})`; tap.style.opacity = 1 - tp;
+
+  // sahne metinleri
+  for (const sc of SCENES) {
+    const pin = out(prog(t, sc.a + 0.15, sc.a + 0.85)), pout = prog(t, sc.b - 0.45, sc.b - 0.05);
+    const vis = t > sc.a && t < sc.b;
+    sc.el.style.display = vis ? "flex" : "none";
+    sc.el.style.opacity = pin * (1 - pout);
+    sc.el.style.transform = `translateY(calc(-50% + ${40 * (1 - pin) - 30 * pout}px))`;
+  }
+
+  // özet: üç telefon ve özellikler
+  const fan = ease(prog(t, 20.9, 21.9)), fanOut = prog(t, 24.0, 24.7);
+  for (const [ph, dx, rot] of [[sideL, -500, -7], [sideR, 500, 7]]) {
+    ph.style.opacity = fan * (1 - fanOut);
+    ph.style.transform = `translate(${741 + dx * fan}px, ${-26 + 40 * (1 - fan) + 60 * fanOut}px) rotate(${rot * fan}deg) scale(0.68)`;
+    ph.style.transformOrigin = "50% 50%";
+    ph.style.zIndex = 1;
+  }
+  main.style.zIndex = 2;
+  const ch = $("chips"); ch.style.top = "866px";
+  ch.style.opacity = prog(t, 21.6, 22.3) * (1 - fanOut);
+  [...ch.children].forEach((c, i) => { const q = out(prog(t, 21.6 + i * 0.12, 22.2 + i * 0.12)); c.style.transform = `translateY(${30 * (1 - q)}px)`; c.style.opacity = q; });
+
+  // kapanış
+  const o = prog(t, 24.6, 25.4);
+  logo.style.opacity = Math.max(+logo.style.opacity, o);
+  if (t > 24) {
+    logo.style.left = "50%"; logo.style.top = "250px";
+    logo.style.transform = `translateX(-50%) scale(${0.85 + 0.15 * back(o)})`; logo.style.transformOrigin = "50% 50%";
+  }
+  const o1 = $("outro1"), o2 = $("outro2"), u = $("url");
+  o1.style.left = "50%"; o1.style.top = (500 + 30 * (1 - out(prog(t, 25.0, 25.7)))) + "px"; o1.style.transform = "translateX(-50%)"; o1.style.whiteSpace = "nowrap";
+  o1.style.opacity = prog(t, 25.0, 25.7);
+  o2.style.top = "610px"; o2.style.opacity = prog(t, 25.4, 26.1);
+  u.style.top = (720 + 20 * (1 - out(prog(t, 25.8, 26.5)))) + "px"; u.style.opacity = prog(t, 25.8, 26.5);
+}
+window.render = render; window.DUR = DUR;
+const q = new URLSearchParams(location.search); if (q.has("t")) render(+q.get("t")); else render(0);
+</script></body></html>
