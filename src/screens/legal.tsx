@@ -54,11 +54,14 @@ export function Kvkk() {
         <li>Duyuru, hatırlatma ve telefon bildirimlerinin gönderilmesi: sözleşmenin ifası (m. 5/2-c).</li>
         <li>Hizmetin güvenliği, kötüye kullanımın önlenmesi ve hataların giderilmesi: meşru menfaat (m. 5/2-f).</li>
         <li>Hukuki uyuşmazlıklarda hakların korunması: bir hakkın tesisi, kullanılması veya korunması (m. 5/2-e).</li>
+        <li>Kullanıcının talebi üzerine sponsorlu bir hizmet firmasından teklif alınması: açık rıza (m. 5/1).</li>
       </ul>
+      <p>Uygulamada gösterilen sponsorlu hizmet önerileri yalnızca apartmanın il ve ilçesine göre belirlenir; bu amaçla kişisel veri işlenmez.</p>
 
       <h2>4. Aktarım</h2>
       <p>Kişisel veriler yalnızca hizmetin sunulması için gerekli olduğu ölçüde şu hizmet sağlayıcılarla paylaşılır: veritabanı ve dosya barındırma (Supabase, Avrupa Birliği sunucuları), uygulama barındırma (Vercel), e-posta gönderimi ve telefon bildirim servisleri (Google, Apple, Mozilla). Bu sağlayıcıların bir kısmı yurt dışında bulunduğundan aktarım, KVKK m. 9'da öngörülen güvenceler çerçevesinde yapılır.</p>
       <p>Apartman içinde: kasa hareketleri, giderler, duyurular ve paylaşılan belgeler tüm üyelere; bir dairenin borç, ödeme ve dekont bilgileri yalnızca o dairenin sakinlerine ve yönetime görünür. Ad ve telefon bilgisi aynı apartmandaki üyelerce görülebilir.</p>
+      <p>Sponsorlu hizmet firmaları: Kullanıcı bir firmadan teklif istediğinde ve buna açıkça onay verdiğinde; ad, telefon, apartman adresi ve talep içeriği yalnızca o firmaya, teklif hazırlanması amacıyla aktarılır.</p>
       <p>Kanunen yetkili kurum ve kuruluşlara, talep halinde ve mevzuatın gerektirdiği ölçüde aktarım yapılabilir.</p>
 
       <h2>5. Toplama yöntemi</h2>
@@ -82,8 +85,8 @@ export function Privacy() {
       <p>Giriş için e-posta adresini; komşuların seni tanıması için adını ve isteğe bağlı telefonunu; apartmanın işleyişi için aidat, ödeme, gider, duyuru, arıza ve belge kayıtlarını; bildirim gönderebilmek için cihazının bildirim aboneliğini saklarız.</p>
       <h2>Ne yapmıyoruz?</h2>
       <ul>
-        <li>Verilerini satmayız, reklam için kullanmayız ve üçüncü kişilerle pazarlama amacıyla paylaşmayız.</li>
-        <li>Uygulama içinde reklam ya da izleme aracı kullanmayız.</li>
+        <li>Kişisel verilerini satmayız ve üçüncü kişilerle pazarlama amacıyla paylaşmayız.</li>
+        <li>Kişisel verilerine dayalı hedefli reklam göstermeyiz; üçüncü taraf reklam ağları ya da izleme araçları kullanmayız.</li>
         <li>Kart bilgisi saklamayız. KOMŞUM aidat ödemesini kendisi tahsil etmez; yapılan ödemelerin kaydını tutar.</li>
       </ul>
       <h2>Kim neyi görür?</h2>
@@ -92,6 +95,14 @@ export function Privacy() {
         <li><b>Yalnızca kendi dairen ve yönetim:</b> dairenin borçları, ödemeleri, ödeme bildirimlerin ve dekontların.</li>
         <li><b>Yalnızca sen ve yönetim:</b> açtığın arıza talepleri ve fotoğrafları.</li>
       </ul>
+      <h2>Sponsorlu hizmet önerileri</h2>
+      <p>Bakım, arıza ve temizlik gibi bölümlerde, apartmanların ihtiyaç duyabileceği hizmet firmaları (asansör bakımı, temizlik, tesisat vb.) <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Bu firmalar KOMŞUM'a listeleme ücreti öder.</p>
+      <ul>
+        <li>Öneriler yalnızca apartmanın bulunduğu il ve ilçeye göre seçilir; senin kişisel verilerin bu seçimde kullanılmaz.</li>
+        <li>Firmalar kimin uygulamayı kullandığını göremez; hiçbir bilgin firmalarla kendiliğinden paylaşılmaz.</li>
+        <li>Bir firmadan teklif istediğinde, yalnızca senin onayınla ve yalnızca teklif için gereken bilgiler (adın, telefonun, apartmanın adresi ve talebin) o firmaya iletilir.</li>
+      </ul>
+
       <h2>Nasıl koruyoruz?</h2>
       <p>Bağlantılar şifrelidir (HTTPS). Erişim kuralları veritabanı düzeyinde uygulanır; bir kullanıcı yetkisi olmayan kaydı göremez. Para içeren kayıtlar silinemez; düzeltmeler gerekçeyle kayıt altına alınır. Dosyalar yalnızca yetkili kişilere kısa süreli bağlantılarla açılır.</p>
       <h2>Hesabını silmek</h2>
@@ -120,15 +131,19 @@ export function Terms() {
       <p>Şeffaflık için para içeren kayıtlar silinemez. Yanlış kayıtlar gerekçesiyle iptal edilir ya da ters kayıtla düzeltilir; bu işlemler tüm geçmişiyle görünür kalır.</p>
       <h2>5. Ücretlendirme</h2>
       <p>Bina sakinleri KOMŞUM'u ücretsiz kullanır. Apartman için abonelik ücreti, uygulamada ve web sitesinde duyurulan güncel tarifeye göre yönetimden alınır. Pilot dönemde hizmet ücretsiz sunulabilir. Ücretli döneme geçişten önce yöneticiler bilgilendirilir.</p>
-      <h2>6. Yasak kullanım</h2>
+      <h2>6. Sponsorlu içerik ve hizmet firmaları</h2>
+      <p>Uygulamada bazı hizmet firmaları ücret karşılığında, belirli süreler için ve <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Sponsorlu içerik, uygulamanın diğer işlevlerini, kayıtları ya da sıralamaları etkilemez.</p>
+      <p>KOMŞUM, apartman ile hizmet firmaları arasındaki anlaşmaların tarafı değildir. Firmaların hizmet kalitesini, fiyatını ve yasal yükümlülüklerini garanti etmez. Hizmet almadan önce firmanın yetki belgelerini ve tekliflerini kontrol etmek yönetimin sorumluluğundadır. Uygunsuz davranan bir firmayı bize bildirebilirsin; inceleme sonucunda listeden kaldırılabilir.</p>
+
+      <h2>7. Yasak kullanım</h2>
       <p>Uygulamayı yasa dışı amaçlarla, başkalarını rahatsız edecek, karalayacak veya kişilik haklarını ihlal edecek şekilde kullanamazsın. Bu şartlara aykırı kullanımda hesap askıya alınabilir.</p>
-      <h2>7. İçerik</h2>
+      <h2>8. İçerik</h2>
       <p>Yüklediğin dosya ve metinlerin sahibi sen ya da apartman yönetimidir. KOMŞUM'a bu içerikleri yalnızca hizmeti sunmak amacıyla saklama ve gösterme izni verirsin.</p>
-      <h2>8. Hizmetin sürekliliği ve sorumluluk</h2>
+      <h2>9. Hizmetin sürekliliği ve sorumluluk</h2>
       <p>Hizmeti kesintisiz ve hatasız sunmak için özen gösteririz, ancak bunu garanti edemeyiz. Yasal sınırlar içinde, dolaylı zararlardan ve kullanıcıların girdiği kayıtların içeriğinden doğan zararlardan sorumlu değiliz. Önemli kayıtların dışa aktarma özelliğiyle yedeğini almanı öneririz.</p>
-      <h2>9. Hesabın kapatılması</h2>
+      <h2>10. Hesabın kapatılması</h2>
       <p>Hesabını istediğin zaman <b>Ayarlar → Hesabımı sil</b> ile kapatabilirsin. Yönetici, hesabını silmeden önce yönetimi bir sakine devretmelidir.</p>
-      <h2>10. Değişiklikler ve uygulanacak hukuk</h2>
+      <h2>11. Değişiklikler ve uygulanacak hukuk</h2>
       <p>Bu şartlar güncellenebilir; önemli değişiklikler uygulama içinde duyurulur. Bu şartlara Türkiye Cumhuriyeti hukuku uygulanır.</p>
       <h2>İletişim</h2>
       <p>{LEGAL.owner} · {LEGAL.email}</p>
