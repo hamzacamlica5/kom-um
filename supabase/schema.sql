@@ -19,8 +19,8 @@ language sql stable as $$ select (now() at time zone 'Europe/Istanbul')::date $$
 
 create or replace function public.komsum_price(unit_count int) returns int
 language sql immutable as $$
-  -- 0–10 daire 99 TL, her ilave 10 daire için +100 TL
-  select 99 + 100 * ((greatest(coalesce(unit_count,0),1) - 1) / 10)
+  -- Daire başı 15 TL (KDV dahil), en az 99 TL
+  select greatest(99, 15 * coalesce(unit_count,0))
 $$;
 
 create or replace function public.raise_tr(msg text) returns void

@@ -37,11 +37,11 @@ select t_expect_err($q$select create_building('Lale Apt', 'Kadıköy', 4, 750, 1
 select save_profile('Hamza Yönetici', '0555');
 select create_building('Lale Apartmanı', 'Kadıköy', 12, 750, 10) as bid \gset
 select t_eq((select count(*)::int from units where building_id = :'bid'), 12, 'bina 12 daireyle oluştu');
-select t_eq((select monthly_price from my_buildings() where building_id = :'bid'), 199, '12 daire = 199 TL abonelik');
-select t_eq(komsum_price(10), 99, '10 daire 99 TL');
-select t_eq(komsum_price(11), 199, '11 daire 199 TL');
-select t_eq(komsum_price(60), 599, '60 daire 599 TL');
-select t_eq(komsum_price(61), 699, '61 daire 699 TL');
+select t_eq((select monthly_price from my_buildings() where building_id = :'bid'), 180, '12 daire = 180 TL abonelik');
+select t_eq(komsum_price(4), 99, '4 daire en az 99 TL');
+select t_eq(komsum_price(10), 150, '10 daire 150 TL');
+select t_eq(komsum_price(40), 600, '40 daire 600 TL');
+select t_eq(komsum_price(61), 915, '61 daire 915 TL');
 select t_eq((select role from my_buildings() where building_id = :'bid'), 'manager', 'oluşturan yönetici');
 select id as u1 from units where building_id = :'bid' and label = 'Daire 1' \gset
 select id as u2 from units where building_id = :'bid' and label = 'Daire 2' \gset

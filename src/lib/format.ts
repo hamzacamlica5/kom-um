@@ -44,7 +44,8 @@ export function ago(s: string): string {
 }
 
 export function price(units: number): number {
-  return 99 + 100 * Math.floor((Math.max(units, 1) - 1) / 10);
+  // Daire başı 15 TL (KDV dahil), en az 99 TL
+  return Math.max(99, 15 * Math.max(units, 0));
 }
 
 export function parseAmount(s: string): number | null {

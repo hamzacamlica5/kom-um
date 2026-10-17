@@ -10,7 +10,10 @@ Bu dosya, ürünle ilgili verilen kararların kaydıdır. Yeni bir özellik geli
 
 ## Fiyatlandırma
 - Ücreti apartman (yönetim) öder; sakinlerden ayrıca ücret alınmaz.
-- Değerlendirilen model: daire başı aylık 15 TL, taban fiyat (örn. 99 TL), yıllık ödemede indirim. Kesinleşmedi; şu an uygulamada 0–10 daire 99 TL, her ilave 10 daire +100 TL gösteriliyor.
+- **Fiyat (17 Ekim 2026, kesin):** daire başı aylık **15 TL, KDV dahil**, en az **99 TL**/ay. Örnek: 10 daire 150 TL, 40 daire 600 TL.
+- **Yıllık ödeme:** 12 ay kullan, 10 ay öde (yaklaşık %17 indirim; para peşin, tek komisyon, uzun bağlılık).
+- Açık konu: büyük sitelerde kademe (ör. ilk 100 daire 15 TL, sonrası 10 TL) pilotta değerlendirilecek.
+- Ödeme sağlayıcı: **iyzico Abonelik** (şirket, iyzico ve PayTR hesapları mevcut). PayTR yedekte.
 - **Ödeme sistemi eklendiğinde: 30 gün ücretsiz deneme.** (15 Ekim 2026)
   - Kart bilgisi istenmeden başlar.
   - Bitişten 7 gün ve 1 gün önce yöneticiye hatırlatma gider.

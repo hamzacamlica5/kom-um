@@ -8,12 +8,12 @@ test("TL biçimi", () => {
   expect(tl(null)).toBe("0 TL");
 });
 
-test("abonelik fiyatı: 0–10 daire 99 TL, her 10 daire +100 TL", () => {
+test("abonelik fiyatı: daire başı 15 TL, en az 99 TL", () => {
   expect(price(0)).toBe(99);
-  expect(price(10)).toBe(99);
-  expect(price(11)).toBe(199);
-  expect(price(20)).toBe(199);
-  expect(price(60)).toBe(599);
+  expect(price(6)).toBe(99);
+  expect(price(7)).toBe(105);
+  expect(price(10)).toBe(150);
+  expect(price(40)).toBe(600);
 });
 
 test("tutar ayrıştırma", () => {

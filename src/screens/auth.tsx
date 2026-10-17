@@ -144,7 +144,7 @@ export function CreateBuilding({ onBack }: { onBack?: () => void }) {
       <div className="pricebox">
         <span>{n} daire için abonelik</span>
         <b>{tl(price(n))} / ay</b>
-        <small>Ücreti apartman öder, sakinler ayrıca ödemez. 0–10 daire 99 TL, her ilave 10 daire +100 TL.</small>
+        <small>Daire başı aylık 15 TL (KDV dahil), en az 99 TL. Yıllık ödemede 12 ay kullan, 10 ay öde. Ücreti apartman öder, sakinler ayrıca ödemez.</small>
       </div>
       <button className="btn btn-primary btn-lg" disabled={busy}>{busy ? "Kuruluyor…" : "Apartmanı oluştur"}</button>
       {onBack && <button type="button" className="linkbtn" onClick={onBack}>Geri dön</button>}
