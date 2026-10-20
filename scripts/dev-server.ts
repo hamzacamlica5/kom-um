@@ -3,6 +3,8 @@
 // Giriş kodu her zaman 123456. Yalnızca geliştirme içindir.
 import { SQL } from "bun";
 import { mkdirSync, existsSync } from "fs";
+// @ts-ignore
+import { draftAnnouncement } from "../api/_ai.js";
 
 const PORT = Number(process.env.PORT || 5173);
 const DB = process.env.DEV_DB || "postgres://postgres@localhost:5433/komsum_dev";
@@ -155,8 +157,20 @@ Bun.serve({
       await sql.unsafe(`update auth.users set email = 'silindi-' || id where id = ${lit(u.sub)}`);
       return json({ ok: true });
     }
+    if (url.pathname === "/api/ai-draft" && req.method === "POST") {
+      // Yerelde denemek için: OMNIROUTE_URL ve OMNIROUTE_API_KEY ortam değişkenleriyle başlat.
+      if (!process.env.OMNIROUTE_URL || !process.env.OMNIROUTE_API_KEY) return json({ message: "Yapay zekâ yardımcısı bu kurulumda açık değil." }, 503);
+      const body = await req.json().catch(() => ({}));
+      const out = await draftAnnouncement({
+        supabaseUrl: url.origin + "/sb", publishableKey: "dev",
+        omniUrl: process.env.OMNIROUTE_URL, omniKey: process.env.OMNIROUTE_API_KEY, model: process.env.OMNIROUTE_MODEL,
+        userToken: (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, ""), buildingId: body.building, notes: body.notes,
+      });
+      return json(out.body, out.status);
+    }
     if (url.pathname === "/api/config") {
-      return new Response(`window.KOMSUM=${JSON.stringify({ supabaseUrl: url.origin + "/sb", supabaseKey: "dev", vapidPublicKey: "" })};`, { headers: { "Content-Type": "application/javascript" } });
+      const aiEnabled = !!(process.env.OMNIROUTE_URL && process.env.OMNIROUTE_API_KEY);
+      return new Response(`window.KOMSUM=${JSON.stringify({ supabaseUrl: url.origin + "/sb", supabaseKey: "dev", vapidPublicKey: "", aiEnabled })};`, { headers: { "Content-Type": "application/javascript" } });
     }
     const file = Bun.file(root + "dist" + (url.pathname === "/" ? "/index.html" : url.pathname));
     if (url.pathname !== "/" && existsSync(root + "dist" + url.pathname)) return new Response(file);

@@ -104,6 +104,7 @@ textarea { resize: vertical; }
 .btn-danger { background: var(--neg); color: #fff; }
 .btn-lg { padding: 14px 18px; font-size: 1.02rem; }
 .btn-sm { padding: 7px 12px; font-size: .86rem; border-radius: 10px; }
+.ai-draft { padding: 12px; border-radius: var(--r-sm); background: var(--brand-soft); margin-bottom: 14px; gap: 10px; }
 .linkbtn { background: none; border: 0; padding: 4px 0; color: var(--brand); font-weight: 700; cursor: pointer; align-self: flex-start; }
 .seg { display: flex; padding: 3px; gap: 2px; background: var(--surface-2); border-radius: 12px; }
 .seg button { flex: 1; padding: 8px 6px; border: 0; background: transparent; border-radius: 9px; font-weight: 700; font-size: .88rem; color: var(--muted); cursor: pointer; }

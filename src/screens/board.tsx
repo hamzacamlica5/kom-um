@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { from, rpc, upload } from "../lib/sb";
+import { config, from, rpc, serverPost, upload } from "../lib/sb";
 import { ago, dateTimeTR, dateTR } from "../lib/format";
 import { useApp } from "../state";
 import { Badge, Empty, ErrorBox, Field, FilePick, Loading, PageHead, ReasonSheet, Segmented, Sheet, useAction, useLoad, useToast } from "../ui";
@@ -37,6 +37,7 @@ export function Announcements() {
         </div>
       )}
       <Sheet open={open} onClose={() => setOpen(false)} title="Yeni duyuru">
+        {config()?.aiEnabled && <AiDraft buildingId={bid} onDraft={(d) => { setT(d.title); setBody(d.body); }} />}
         <form className="stack" onSubmit={async (e) => { e.preventDefault(); if (await run(() => rpc("post_announcement", { p_building: bid, p_title: t, p_body: body }), "Duyuru yayınlandı, sakinlere bildirim gitti.")) { setOpen(false); data.reload(); } }}>
           <Field label="Başlık"><input id="a-title" required maxLength={120} value={t} onChange={(e) => setT(e.target.value)} placeholder="Örn. Su kesintisi" /></Field>
           <Field label="Duyuru metni"><textarea id="a-body" required rows={6} maxLength={4000} value={body} onChange={(e) => setBody(e.target.value)} /></Field>
@@ -45,6 +46,25 @@ export function Announcements() {
       </Sheet>
       <ReasonSheet open={!!arch} onClose={() => setArch(null)} title="Duyuruyu arşivle" confirm="Arşivle" desc="Duyuru sakinlerin ekranından kalkar, arşivde saklanır."
         onSubmit={(r) => run(() => rpc("archive_announcement", { p_id: arch!.id, p_reason: r }), "Duyuru arşivlendi.").then((ok) => { if (ok) data.reload(); return ok; })} />
+    </div>
+  );
+}
+
+// Yapay zekâ ile duyuru taslağı (OmniRoute, /api/ai-draft). Yalnızca kurulumda açıksa görünür.
+function AiDraft({ buildingId, onDraft }: { buildingId: string; onDraft: (d: { title: string; body: string }) => void }) {
+  const [notes, setNotes] = useState("");
+  const [done, setDone] = useState(false);
+  const { busy, run } = useAction();
+  const go = async () => {
+    const d = await run(() => serverPost<{ title: string; body: string }>("/api/ai-draft", { building: buildingId, notes }));
+    if (d && typeof d === "object") { onDraft(d); setDone(true); }
+  };
+  return (
+    <div className="ai-draft stack">
+      <Field label="Yapay zekâ ile taslak" hint={done ? "Taslak aşağıya yazıldı. Yayınlamadan önce oku ve [köşeli parantezli] yerleri doldur." : "Birkaç kelime yeter: ne oluyor, ne zaman, kimi etkiliyor."}>
+        <textarea id="a-notes" rows={3} maxLength={1500} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Örn. cuma 10-14 arası su kesik, tesisat tamiri, depoya su doldurun" />
+      </Field>
+      <button type="button" className="btn btn-ghost btn-sm" disabled={busy || notes.trim().length < 5} onClick={go}>{busy ? "Hazırlanıyor…" : done ? "Yeniden oluştur" : "Notlardan taslak oluştur"}</button>
     </div>
   );
 }
