@@ -4,6 +4,7 @@ export default function handler(req, res) {
     supabaseUrl: (process.env.SUPABASE_URL || "").replace(/\/$/, ""),
     supabaseKey: process.env.SUPABASE_PUBLISHABLE_KEY || "",
     vapidPublicKey: process.env.VAPID_PUBLIC_KEY || "",
+    aiEnabled: !!(process.env.OMNIROUTE_URL && process.env.OMNIROUTE_API_KEY),
   };
   res.setHeader("Content-Type", "application/javascript; charset=utf-8");
   res.setHeader("Cache-Control", "public, max-age=300");

@@ -90,6 +90,22 @@ Ardından Supabase → **Authentication → URL Configuration** → **Site URL**
 2. iPhone: Safari → Paylaş → **Ana Ekrana Ekle**. Android: Chrome → ⋮ → **Uygulamayı yükle**.
 3. Ana ekrandaki KOMŞUM simgesinden aç → **Menü → Ayarlar → Bildirimleri aç** → **Test bildirimi gönder**.
 
+## 6. (İsteğe bağlı) Yapay zekâ ile duyuru taslağı — OmniRoute
+
+Yönetici "Yeni duyuru" penceresine birkaç kelime not yazar ("cuma 10-14 su kesik, tesisat tamiri"), uygulama başlığı ve metni hazırlar; yönetici okuyup düzenler ve yayınlar. Bu özellik yapay zekâ isteklerini **OmniRoute** üzerinden gönderir. Ayar yapılmazsa özellik görünmez, uygulamanın geri kalanı aynen çalışır.
+
+1. OmniRoute'u kendi sunucunda kur (DigitalOcean, Hostinger veya Railway'deki hazır kurulumlar en kolayı). Adresin `https://...` ile başlamalı.
+2. OmniRoute panelinde **Endpoints** bölümünden bir API anahtarı oluştur ve en az bir yapay zekâ sağlayıcısını bağla.
+3. Vercel → **Settings → Environment Variables**'a ekle, sonra **Redeploy** de:
+
+| Ad | Değer |
+|---|---|
+| `OMNIROUTE_URL` | OmniRoute adresin, örn. `https://ai.senin-alanin.com/v1` |
+| `OMNIROUTE_API_KEY` | OmniRoute'ta oluşturduğun anahtar — kimseyle paylaşma |
+| `OMNIROUTE_MODEL` | (isteğe bağlı) Kullanılacak model; boş bırakırsan `auto` |
+
+Anahtar yalnızca Vercel'de durur, telefona hiç gitmez. Özelliği yalnızca o apartmanın yöneticisi kullanabilir; bu sunucuda tekrar kontrol edilir. Yapay zekâ bilmediği tarih, saat veya tutarı uydurmaz, `[köşeli parantez]` ile boş bırakır — yayınlamadan önce bunları doldur.
+
 ---
 
 ## Bilgiler
@@ -111,5 +127,5 @@ Veritabanını değiştiren her güncelleme `supabase/guncellemeler/` klasörün
 ## Geliştirme (Claude için not)
 
 - `bun scripts/build.ts` → `dist/` klasörünü üretir. Vercel derleme yapmaz, `dist/` olduğu gibi yayınlanır; kod değişince yeniden derleyip `dist/` ile birlikte gönder.
-- `bun scripts/dev-server.ts` → yerel Postgres üzerinde Supabase taklidiyle çalışır (giriş kodu `123456`).
+- `bun scripts/dev-server.ts` → yerel Postgres üzerinde Supabase taklidiyle çalışır (giriş kodu `123456`). Yapay zekâ taslağını denemek için `OMNIROUTE_URL` ve `OMNIROUTE_API_KEY` ile başlat.
 - `bash supabase/tests/run.sh` → veritabanı kurallarının testleri. `bun test` → istemci ve bildirim gönderici testleri. `node scripts/e2e.mjs`, `e2e-2.mjs` ve `e2e-3.mjs` → tarayıcıda uçtan uca senaryolar.

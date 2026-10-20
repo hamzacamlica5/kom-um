@@ -4,7 +4,7 @@
 
 type Session = { access_token: string; refresh_token: string; expires_at: number; user: { id: string; email?: string } };
 
-const cfg = () => (window as any).KOMSUM as { supabaseUrl: string; supabaseKey: string; vapidPublicKey?: string };
+const cfg = () => (window as any).KOMSUM as { supabaseUrl: string; supabaseKey: string; vapidPublicKey?: string; aiEnabled?: boolean };
 const SKEY = "komsum.session";
 let session: Session | null = null;
 const listeners = new Set<(s: Session | null) => void>();
