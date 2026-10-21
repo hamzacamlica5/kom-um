@@ -1,4 +1,4 @@
-/* KOMŞUM — kapı yeşili + zil sarısı; mobil öncelikli tek sütun, altta sekme çubuğu */
+/* Apartmanca — kapı yeşili + zil sarısı; mobil öncelikli tek sütun, altta sekme çubuğu */
 :root {
   --bg: #F3F5F2; --surface: #FFFFFF; --surface-2: #EAEFEA; --line: #DCE3DC;
   --ink: #17221E; --muted: #5E6B65;
@@ -65,7 +65,7 @@ main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 18px 16p
 /* ---------- marka ---------- */
 .brand { display: inline-flex; align-items: center; gap: 10px; }
 .brand-mark { width: 44px; height: 44px; }
-.brand-word { font-weight: 800; font-size: 1.5rem; letter-spacing: .06em; color: var(--brand); }
+.brand-word { font-weight: 800; font-size: 1.5rem; letter-spacing: -.01em; color: var(--brand); }
 .brand-sm .brand-mark { width: 30px; height: 30px; }
 .brand-sm .brand-word { font-size: 1.05rem; }
 

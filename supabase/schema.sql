@@ -1,5 +1,5 @@
 -- =====================================================================
--- KOMŞUM veritabanı şeması (Supabase / PostgreSQL 15+)
+-- Apartmanca (eski adıyla KOMŞUM) veritabanı şeması (Supabase / PostgreSQL 15+)
 -- Supabase panelinde SQL Editor'e bu dosyanın tamamını yapıştırıp
 -- "Run" demen yeterli. Tekrar çalıştırılırsa mevcut verilere dokunmaz.
 --
@@ -1053,7 +1053,7 @@ create or replace function public.send_test_notification() returns void
 language plpgsql security definer set search_path = public as $$
 begin
   if auth.uid() is null then perform raise_tr('Oturum açman gerekiyor.'); end if;
-  perform notify(auth.uid(), null, 'test', 'KOMŞUM test bildirimi', 'Bildirimler bu telefonda çalışıyor.', '/');
+  perform notify(auth.uid(), null, 'test', 'Apartmanca test bildirimi', 'Bildirimler bu telefonda çalışıyor.', '/');
 end $$;
 
 create or replace function public.mark_notifications_read() returns void

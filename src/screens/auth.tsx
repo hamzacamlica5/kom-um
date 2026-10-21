@@ -12,7 +12,7 @@ export function Brand({ small }: { small?: boolean }) {
         <path d="M4 14 24 3l20 11" fill="none" stroke="var(--brand)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
         <g fill="var(--on-brand)"><rect x="12" y="17" width="7" height="6" rx="1.5" /><rect x="29" y="17" width="7" height="6" rx="1.5" /><rect x="12" y="28" width="7" height="6" rx="1.5" /><rect x="20.5" y="30" width="7" height="12" rx="1.5" /><rect x="29" y="28" width="7" height="6" rx="1.5" fill="var(--accent)" /></g>
       </svg>
-      <span className="brand-word">KOMŞUM</span>
+      <span className="brand-word">Apartmanca</span>
     </div>
   );
 }

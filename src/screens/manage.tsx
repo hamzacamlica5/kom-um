@@ -76,7 +76,7 @@ function BulkInviteSheet({ open, bid, building, onClose }: { open: boolean; bid:
   }, [open, bid]);
   const rows = data.data || [];
   const all = rows.map((r) => `${r.unit_label}: ${inviteUrl(r.token)}`).join("\n");
-  const message = `${building} artık KOMŞUM'da! Aidat, kasa, duyuru ve arıza takibi tek yerde. Kendi dairenin bağlantısına dokunup katıl (7 gün geçerli):\n\n${all}`;
+  const message = `${building} artık Apartmanca'da! Aidat, kasa, duyuru ve arıza takibi tek yerde. Kendi dairenin bağlantısına dokunup katıl (7 gün geçerli):\n\n${all}`;
   const copy = async (text: string, ok: string) => {
     try { await navigator.clipboard.writeText(text); toast(ok); } catch { toast("Kopyalanamadı; metni basılı tutup kopyala.", "err"); }
   };
@@ -93,7 +93,7 @@ function BulkInviteSheet({ open, bid, building, onClose }: { open: boolean; bid:
             {rows.map((r) => (
               <li key={r.unit_id}>
                 <div className="row-main"><b>{r.unit_label}</b><span className="small muted invite-url">{inviteUrl(r.token)}</span></div>
-                <button className="linkbtn small" onClick={() => copy(`${building} · ${r.unit_label} için KOMŞUM davetin: ${inviteUrl(r.token)} (7 gün geçerli)`, r.unit_label + " bağlantısı kopyalandı.")}>Kopyala</button>
+                <button className="linkbtn small" onClick={() => copy(`${building} · ${r.unit_label} için Apartmanca davetin: ${inviteUrl(r.token)} (7 gün geçerli)`, r.unit_label + " bağlantısı kopyalandı.")}>Kopyala</button>
               </li>
             ))}
           </ul>
@@ -120,7 +120,7 @@ function UnitSheet({ open, unit, isNew, bid, d, onClose, onChanged }: { open: bo
     try { await navigator.clipboard.writeText(text); toast("Bağlantı kopyalandı."); }
     catch { toast("Kopyalanamadı; bağlantıyı basılı tutup kopyala.", "err"); }
   };
-  const msg = link && unit ? `${unit.label} için KOMŞUM davetin: ${link} (7 gün geçerli)` : "";
+  const msg = link && unit ? `${unit.label} için Apartmanca davetin: ${link} (7 gün geçerli)` : "";
   return (
     <Sheet open={open} onClose={onClose} title={isNew ? "Daire ekle" : unit?.label || ""}>
       <div className="stack">
@@ -202,7 +202,7 @@ export function Settings() {
             </div>
           </>
         ) : ps === "needs-install" ? (
-          <p className="note-info">iPhone'da bildirim almak için önce KOMŞUM'u ana ekrana ekle: Safari'de <b>Paylaş</b> → <b>Ana Ekrana Ekle</b>. Sonra ana ekrandaki simgeden açıp buraya dön.</p>
+          <p className="note-info">iPhone'da bildirim almak için önce Apartmanca'yı ana ekrana ekle: Safari'de <b>Paylaş</b> → <b>Ana Ekrana Ekle</b>. Sonra ana ekrandaki simgeden açıp buraya dön.</p>
         ) : ps === "denied" ? (
           <p className="note-warn">Bildirim izni reddedilmiş. Telefonun ayarlarından bu uygulama için bildirimlere izin ver, sonra sayfayı yenile.</p>
         ) : ps === "unsupported" ? (
@@ -258,7 +258,7 @@ export function Settings() {
       </nav>
       <button className="linkbtn danger center-self" onClick={() => setDel(true)}>Hesabımı sil</button>
       <DeleteAccountSheet open={del} onClose={() => setDel(false)} />
-      <p className="small muted center">KOMŞUM · Apartmanda ne oluyor, herkes bilsin.</p>
+      <p className="small muted center">Apartmanca · Apartmanda ne oluyor, herkes bilsin.</p>
 
       {b && <TransferSheet open={transfer} bid={b.building_id} onClose={() => setTransfer(false)} onDone={async () => { setTransfer(false); await refresh(); go("/"); }} />}
       <Sheet open={newB} onClose={() => setNewB(false)} title="Yeni apartman"><CreateBuilding /></Sheet>

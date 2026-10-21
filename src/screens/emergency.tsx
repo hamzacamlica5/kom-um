@@ -90,7 +90,7 @@ export function Emergency() {
           {i?.updated_at && <p className="small muted">Bina bilgileri son güncelleme: {dateTimeTR(i.updated_at)}</p>}
         </>
       )}
-      <p className="small muted">Bu ekran internet olmadan da açılır; arama düğmeleri telefonunun arama ekranını açar. KOMŞUM acil çağrı hizmeti değildir.</p>
+      <p className="small muted">Bu ekran internet olmadan da açılır; arama düğmeleri telefonunun arama ekranını açar. Apartmanca acil çağrı hizmeti değildir.</p>
       <EditSheet open={edit} bid={bid} info={i || null} onClose={() => setEdit(false)} onSaved={() => { setEdit(false); data.reload(); }} />
     </div>
   );

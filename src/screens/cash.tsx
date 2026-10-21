@@ -55,7 +55,7 @@ export function Cash() {
             </div>
           )}
           {isManager && !hasOpening && d!.rows.length < 3 && (
-            <p className="note-info">Apartmanın kasasında KOMŞUM'a geçmeden önce para varsa <b>Başlangıç bakiyesi gir</b> ile ekle. Tutar, seçtiğin günün başındaki kasa + banka toplamı olmalı.</p>
+            <p className="note-info">Apartmanın kasasında Apartmanca'ya geçmeden önce para varsa <b>Başlangıç bakiyesi gir</b> ile ekle. Tutar, seçtiğin günün başındaki kasa + banka toplamı olmalı.</p>
           )}
           <h2 className="h-sec">Hesap hareketleri</h2>
           <Segmented value={filter} onChange={setFilter} options={[["all", "Tümü"], ["in", "Girişler"], ["out", "Çıkışlar"]]} />
@@ -168,7 +168,7 @@ function OpeningSheet({ open, bid, hasOpening, onClose, onDone }: { open: boolea
         e.preventDefault();
         if (await run(() => rpc("set_opening_balance", { p_building: bid, p_amount: parseAmount(amount), p_effective_on: date, p_note: note }), "Başlangıç bakiyesi kaydedildi.")) onDone();
       }}>
-        <p className="muted small">KOMŞUM'u kullanmaya başladığın gün kasada ve bankada toplam ne kadar para vardı? Bu tutar aidat tahsilatı sayılmaz; ilk hareket olarak görünür.</p>
+        <p className="muted small">Apartmanca'yı kullanmaya başladığın gün kasada ve bankada toplam ne kadar para vardı? Bu tutar aidat tahsilatı sayılmaz; ilk hareket olarak görünür.</p>
         <div className="grid2">
           <Field label="Tutar (TL)"><input id="o-amount" inputMode="decimal" required value={amount} onChange={(e) => setAmount(e.target.value)} /></Field>
           <Field label="Tarih"><input id="o-date" type="date" required max={istanbulToday()} value={date} onChange={(e) => setDate(e.target.value)} /></Field>

@@ -1,4 +1,4 @@
-// KOMŞUM servis çalışanı: uygulama kabuğunu önbellekler, telefon bildirimlerini gösterir.
+// Apartmanca servis çalışanı: uygulama kabuğunu önbellekler, telefon bildirimlerini gösterir.
 const VERSION = "__BUILD__";
 const CACHE = "komsum-" + VERSION;
 const SHELL = ["/", "/app.js?v=" + VERSION, "/app.css?v=" + VERSION, "/api/config", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/badge-72.png"];
@@ -33,8 +33,8 @@ self.addEventListener("fetch", (e) => {
 
 self.addEventListener("push", (e) => {
   let d = {};
-  try { d = e.data ? e.data.json() : {}; } catch { d = { title: "KOMŞUM", body: e.data && e.data.text() }; }
-  e.waitUntil(self.registration.showNotification(d.title || "KOMŞUM", {
+  try { d = e.data ? e.data.json() : {}; } catch { d = { title: "Apartmanca", body: e.data && e.data.text() }; }
+  e.waitUntil(self.registration.showNotification(d.title || "Apartmanca", {
     body: d.body || "",
     icon: "/icons/icon-192.png",
     badge: "/icons/badge-72.png",

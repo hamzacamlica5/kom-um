@@ -58,7 +58,7 @@ export function Breakdown() {
   const share = async () => {
     if (!d) return;
     const top = d.categories.slice(0, 4).map((c) => `${c.category} %${Math.round((Number(c.amount) / total) * 100)}`).join(", ");
-    const text = `${b!.name} · ${label.toLowerCase()} giderler: ${tl(total)}. ${top}. KOMŞUM ile her kuruş kayıtlı.`;
+    const text = `${b!.name} · ${label.toLowerCase()} giderler: ${tl(total)}. ${top}. Apartmanca ile her kuruş kayıtlı.`;
     try {
       if ((navigator as any).share) await (navigator as any).share({ title: "Aidatımız nereye gitti?", text, url: location.origin });
       else { await navigator.clipboard.writeText(text + " " + location.origin); toast("Özet kopyalandı."); }

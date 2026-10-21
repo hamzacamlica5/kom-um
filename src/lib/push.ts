@@ -26,7 +26,7 @@ export async function enablePush(): Promise<void> {
   const key = config().vapidPublicKey;
   if (!key) throw new Error("Bildirim anahtarı ayarlanmamış. Kurulumdaki VAPID adımını tamamla.");
   const perm = await Notification.requestPermission();
-  if (perm !== "granted") throw new Error("Bildirim izni verilmedi. Telefon ayarlarından KOMŞUM için bildirimlere izin verebilirsin.");
+  if (perm !== "granted") throw new Error("Bildirim izni verilmedi. Telefon ayarlarından Apartmanca için bildirimlere izin verebilirsin.");
   const reg = await navigator.serviceWorker.ready;
   let sub = await reg.pushManager.getSubscription();
   if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(key) });

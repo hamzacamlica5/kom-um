@@ -1,4 +1,4 @@
-# KOMŞUM ürün kararları
+# Apartmanca ürün kararları (eski adı KOMŞUM)
 
 Bu dosya, ürünle ilgili verilen kararların kaydıdır. Yeni bir özellik geliştirirken önce buraya bakılır.
 
@@ -28,7 +28,9 @@ Bu dosya, ürünle ilgili verilen kararların kaydıdır. Yeni bir özellik geli
 - Seçim yalnızca apartmanın il/ilçesine göre yapılır; kullanıcı bilgisi firmaya yalnızca "Teklif iste" ile ve açık onayla gider.
 - Zamanlama: altyapı pilottan sonra kurulacak.
 
-## Marka ve alan adı (17 Ekim 2026) — BEKLEMEDE
+## Marka ve alan adı (17 Ekim 2026)
+- **21 Ekim 2026: Uygulama Apartmanca adına geçirildi.** (Ekran, yasal metinler, bildirimler, kurulum notları.) İç teknik adlar (`komsum` depolama alanı, tarayıcı anahtarları, cron işi) oturumlar bozulmasın diye aynen bırakıldı; kullanıcı bunları görmez.
+- Bekleyen: alan adı + marka vekili görüşü + marka başvurusu; Supabase e-posta şablonu ve SMTP gönderici adı; tanıtım videoları (alan adı alınınca yeni adresle yeniden üretilecek).
 - **KOMŞUM adı bırakılıyor.** Apsiyon'un "Komşum Var" tescili (2022/008391, sınıf 35/42) ve alandaki benzer "komşu" markaları yüzünden risk yüksek. "Komşu" içeren isimlerden (Komşu Komşu dahil; komsukomsu .com/.com.tr/.tr/.biz başkasında) tümden vazgeçildi.
 - **Ana aday: Apartmanca.**
   - TÜRKPATENT: "apartmanca" adına kayıt yok (yalnızca ilgisiz "akapartmancaddebostan", Akiş GYO, 36/42/43).

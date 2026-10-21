@@ -177,4 +177,4 @@ Bun.serve({
     return new Response(Bun.file(root + "dist/index.html"), { headers: { "Content-Type": "text/html; charset=utf-8" } });
   },
 });
-console.log("KOMŞUM geliştirme sunucusu: http://localhost:" + PORT);
+console.log("Apartmanca geliştirme sunucusu: http://localhost:" + PORT);

@@ -2,7 +2,7 @@
   "name": "komsum",
   "version": "1.0.0",
   "private": true,
-  "description": "KOMŞUM — apartman yönetimi PWA (Supabase + Vercel)",
+  "description": "Apartmanca — apartman yönetimi PWA (Supabase + Vercel)",
   "type": "module",
   "scripts": {
     "build": "bun scripts/build.ts",

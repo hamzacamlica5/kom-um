@@ -32,11 +32,11 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
 export function Kvkk() {
   return (
     <Shell title="KVKK Aydınlatma Metni">
-      <p>Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun ("KVKK") 10. maddesi uyarınca, KOMŞUM uygulamasını kullanan yöneticileri ve bina sakinlerini kişisel verilerinin işlenmesi hakkında bilgilendirmek için hazırlanmıştır.</p>
+      <p>Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun ("KVKK") 10. maddesi uyarınca, Apartmanca uygulamasını kullanan yöneticileri ve bina sakinlerini kişisel verilerinin işlenmesi hakkında bilgilendirmek için hazırlanmıştır.</p>
 
       <h2>1. Veri sorumlusu</h2>
       <p>{LEGAL.owner}, {LEGAL.address}. İletişim: {LEGAL.email}</p>
-      <p>Apartman veya site yönetimi, kendi binasına ait kayıtları (aidat, gider, kasa, belge) KOMŞUM üzerinden tutar. Bu kayıtların içeriğinden ve doğruluğundan ilgili yönetim sorumludur; KOMŞUM bu kayıtları yönetim adına saklar ve sunar.</p>
+      <p>Apartman veya site yönetimi, kendi binasına ait kayıtları (aidat, gider, kasa, belge) Apartmanca üzerinden tutar. Bu kayıtların içeriğinden ve doğruluğundan ilgili yönetim sorumludur; Apartmanca bu kayıtları yönetim adına saklar ve sunar.</p>
 
       <h2>2. İşlenen kişisel veriler</h2>
       <ul>
@@ -81,14 +81,14 @@ export function Kvkk() {
 export function Privacy() {
   return (
     <Shell title="Gizlilik Politikası">
-      <p>KOMŞUM, apartman ve site yönetimini şeffaf hale getirmek için tasarlanmış bir uygulamadır. Bu politika hangi bilgileri neden topladığımızı ve nasıl koruduğumuzu sade bir dille anlatır. Ayrıntılı yasal bilgi için <Link to="/kvkk">KVKK Aydınlatma Metni</Link>'ne bakabilirsin.</p>
+      <p>Apartmanca, apartman ve site yönetimini şeffaf hale getirmek için tasarlanmış bir uygulamadır. Bu politika hangi bilgileri neden topladığımızı ve nasıl koruduğumuzu sade bir dille anlatır. Ayrıntılı yasal bilgi için <Link to="/kvkk">KVKK Aydınlatma Metni</Link>'ne bakabilirsin.</p>
       <h2>Ne topluyoruz?</h2>
       <p>Giriş için e-posta adresini; komşuların seni tanıması için adını ve isteğe bağlı telefonunu; apartmanın işleyişi için aidat, ödeme, gider, duyuru, arıza ve belge kayıtlarını; bildirim gönderebilmek için cihazının bildirim aboneliğini saklarız.</p>
       <h2>Ne yapmıyoruz?</h2>
       <ul>
         <li>Kişisel verilerini satmayız ve üçüncü kişilerle pazarlama amacıyla paylaşmayız.</li>
         <li>Kişisel verilerine dayalı hedefli reklam göstermeyiz; üçüncü taraf reklam ağları ya da izleme araçları kullanmayız.</li>
-        <li>Kart bilgisi saklamayız. KOMŞUM aidat ödemesini kendisi tahsil etmez; yapılan ödemelerin kaydını tutar.</li>
+        <li>Kart bilgisi saklamayız. Apartmanca aidat ödemesini kendisi tahsil etmez; yapılan ödemelerin kaydını tutar.</li>
       </ul>
       <h2>Kim neyi görür?</h2>
       <ul>
@@ -97,7 +97,7 @@ export function Privacy() {
         <li><b>Yalnızca sen ve yönetim:</b> açtığın arıza talepleri ve fotoğrafları.</li>
       </ul>
       <h2>Sponsorlu hizmet önerileri</h2>
-      <p>Bakım, arıza ve temizlik gibi bölümlerde, apartmanların ihtiyaç duyabileceği hizmet firmaları (asansör bakımı, temizlik, tesisat vb.) <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Bu firmalar KOMŞUM'a listeleme ücreti öder.</p>
+      <p>Bakım, arıza ve temizlik gibi bölümlerde, apartmanların ihtiyaç duyabileceği hizmet firmaları (asansör bakımı, temizlik, tesisat vb.) <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Bu firmalar Apartmanca'ya listeleme ücreti öder.</p>
       <ul>
         <li>Sponsorlu öneriler yalnızca yöneticilere gösterilir. Bina sakinleri uygulamada hiçbir sponsorlu içerik görmez.</li>
         <li>Öneriler yalnızca apartmanın bulunduğu il ve ilçeye göre seçilir; senin kişisel verilerin bu seçimde kullanılmaz.</li>
@@ -118,9 +118,9 @@ export function Privacy() {
 export function Terms() {
   return (
     <Shell title="Kullanım Şartları">
-      <p>KOMŞUM'u kullanarak bu şartları kabul etmiş olursun. Lütfen dikkatlice oku.</p>
+      <p>Apartmanca'yı kullanarak bu şartları kabul etmiş olursun. Lütfen dikkatlice oku.</p>
       <h2>1. Hizmet</h2>
-      <p>KOMŞUM; aidat takibi, ödeme kaydı ve bildirimi, kasa ve gider kaydı, duyuru, arıza talebi ve belge saklama araçları sunan bir apartman yönetimi uygulamasıdır. KOMŞUM bir ödeme kuruluşu değildir; aidat tahsil etmez, para transferi yapmaz, yalnızca kullanıcıların girdiği kayıtları tutar.</p>
+      <p>Apartmanca; aidat takibi, ödeme kaydı ve bildirimi, kasa ve gider kaydı, duyuru, arıza talebi ve belge saklama araçları sunan bir apartman yönetimi uygulamasıdır. Apartmanca bir ödeme kuruluşu değildir; aidat tahsil etmez, para transferi yapmaz, yalnızca kullanıcıların girdiği kayıtları tutar.</p>
       <h2>2. Hesap</h2>
       <p>Hesabını e-posta adresinle oluşturursun ve giriş kodlarının güvenliğinden sen sorumlusun. Gerçek bilgilerini kullanmalı, başkası adına hesap açmamalısın.</p>
       <h2>3. Yöneticinin sorumlulukları</h2>
@@ -132,7 +132,7 @@ export function Terms() {
       <h2>4. Kayıtların değiştirilemezliği</h2>
       <p>Şeffaflık için para içeren kayıtlar silinemez. Yanlış kayıtlar gerekçesiyle iptal edilir ya da ters kayıtla düzeltilir; bu işlemler tüm geçmişiyle görünür kalır.</p>
       <h2>5. Ücretlendirme</h2>
-      <p>Abonelik ücretini apartman yönetimi öder; bina sakinlerinden KOMŞUM için ayrıca ücret alınmaz. Yönetim bu ücreti apartmanın ortak giderlerinden karşılayabilir ve bu durumda gider, kasa hareketlerinde herkes tarafından görülür. Abonelik ücreti, uygulamada ve web sitesinde duyurulan güncel tarifeye göre yönetimden alınır. Pilot dönemde hizmet ücretsiz sunulabilir. Ücretli döneme geçişten önce yöneticiler bilgilendirilir.</p>
+      <p>Abonelik ücretini apartman yönetimi öder; bina sakinlerinden Apartmanca için ayrıca ücret alınmaz. Yönetim bu ücreti apartmanın ortak giderlerinden karşılayabilir ve bu durumda gider, kasa hareketlerinde herkes tarafından görülür. Abonelik ücreti, uygulamada ve web sitesinde duyurulan güncel tarifeye göre yönetimden alınır. Pilot dönemde hizmet ücretsiz sunulabilir. Ücretli döneme geçişten önce yöneticiler bilgilendirilir.</p>
       <h2>6. Sponsorlu içerik ve hizmet firmaları</h2>
       <p>Uygulamada bazı hizmet firmaları ücret karşılığında, belirli süreler için ve <b>"Sponsorlu"</b> etiketiyle gösterilebilir. Sponsorlu içerik şu kurallara tabidir:</p>
       <ul>
@@ -142,12 +142,12 @@ export function Terms() {
         <li>Yöneticiler hizmet aldıkları firmayı puanlayabilir. Düşük puan alan ya da şikâyet üzerine uygunsuz bulunan firma, ödeme yapmış olsa bile listeden kaldırılır.</li>
         <li>Sponsorlu içerik; kayıtları, hesaplamaları ya da uygulamanın diğer işlevlerini hiçbir şekilde etkilemez.</li>
       </ul>
-      <p>KOMŞUM, apartman ile hizmet firmaları arasındaki anlaşmaların tarafı değildir. Firmaların hizmet kalitesini, fiyatını ve yasal yükümlülüklerini garanti etmez. Hizmet almadan önce firmanın yetki belgelerini ve tekliflerini kontrol etmek yönetimin sorumluluğundadır. Uygunsuz davranan bir firmayı bize bildirebilirsin; inceleme sonucunda listeden kaldırılabilir.</p>
+      <p>Apartmanca, apartman ile hizmet firmaları arasındaki anlaşmaların tarafı değildir. Firmaların hizmet kalitesini, fiyatını ve yasal yükümlülüklerini garanti etmez. Hizmet almadan önce firmanın yetki belgelerini ve tekliflerini kontrol etmek yönetimin sorumluluğundadır. Uygunsuz davranan bir firmayı bize bildirebilirsin; inceleme sonucunda listeden kaldırılabilir.</p>
 
       <h2>7. Yasak kullanım</h2>
       <p>Uygulamayı yasa dışı amaçlarla, başkalarını rahatsız edecek, karalayacak veya kişilik haklarını ihlal edecek şekilde kullanamazsın. Bu şartlara aykırı kullanımda hesap askıya alınabilir.</p>
       <h2>8. İçerik</h2>
-      <p>Yüklediğin dosya ve metinlerin sahibi sen ya da apartman yönetimidir. KOMŞUM'a bu içerikleri yalnızca hizmeti sunmak amacıyla saklama ve gösterme izni verirsin.</p>
+      <p>Yüklediğin dosya ve metinlerin sahibi sen ya da apartman yönetimidir. Apartmanca'ya bu içerikleri yalnızca hizmeti sunmak amacıyla saklama ve gösterme izni verirsin.</p>
       <h2>9. Hizmetin sürekliliği ve sorumluluk</h2>
       <p>Hizmeti kesintisiz ve hatasız sunmak için özen gösteririz, ancak bunu garanti edemeyiz. Yasal sınırlar içinde, dolaylı zararlardan ve kullanıcıların girdiği kayıtların içeriğinden doğan zararlardan sorumlu değiliz. Önemli kayıtların dışa aktarma özelliğiyle yedeğini almanı öneririz.</p>
       <h2>10. Hesabın kapatılması</h2>
@@ -174,7 +174,7 @@ const PROMISES: [string, string][] = [
 export function Trust() {
   return (
     <Shell title="Güven Merkezi">
-      <p className="lead">KOMŞUM'a apartmanının parasını ve komşularının bilgilerini emanet ediyorsun. Bu emanete nasıl baktığımızı açıkça yazıyoruz.</p>
+      <p className="lead">Apartmanca'ya apartmanının parasını ve komşularının bilgilerini emanet ediyorsun. Bu emanete nasıl baktığımızı açıkça yazıyoruz.</p>
       <div className="promises">
         {PROMISES.map(([t, d]) => <section key={t} className="promise"><h2>{t}</h2><p>{d}</p></section>)}
       </div>

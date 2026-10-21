@@ -1,4 +1,4 @@
-# KOMŞUM
+# Apartmanca
 
 Apartmanda ne oluyor, herkes bilsin. Aidat, kasa, dekont onayı, duyuru, arıza ve evrak takibi için telefona kurulabilen web uygulaması.
 
