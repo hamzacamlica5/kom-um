@@ -46,6 +46,13 @@ Bu dosya, ürünle ilgili verilen kararların kaydıdır. Yeni bir özellik geli
   4. İsim 5–10 kişiyle test edilecek (ne işe yarar? yazabilir mi? ertesi gün hatırlıyor mu?).
 - **Ardından (Claude):** uygulamadaki KOMŞUM adı, logo, yasal metinler, e-posta şablonları ve tanıtım videoları yeni isme göre güncellenecek.
 
+## Tanıtım sitesi ve mevzuat (21 Ekim 2026)
+- apartmanca.com = tanıtım sitesi (`site/`, ayrı Vercel projesi), app.apartmanca.com = uygulama.
+- Site ve uygulama **hiçbir dış sunucudan kaynak yüklemez** (Google Fonts kaldırıldı, yazı tipi kendi sunucumuzda). Sitede çerez, analiz, reklam yok → çerez onay penceresi gerekmiyor. Analiz eklenirse önce açık rıza alınacak.
+- Yasal metinler tek kaynakta (`src/legal/texts.tsx`): KVKK, gizlilik, çerez, kullanım şartları, ön bilgilendirme, mesafeli satış, iptal-iade, iletişim/künye. Şirket bilgileri ve fiyat `src/legal/info.ts`.
+- İade politikası (kullanıcı onayı bekliyor): ilk ödemeden sonra 14 gün koşulsuz tam iade; yıllık yenilemede de 14 gün; aylık yenilemede o ay iade yok. Yıllık yenilemeden 7 gün önce e-posta hatırlatma. Fiyat değişikliği 30 gün önceden bildirilir.
+- Hukukçuya sorulacaklar: KVKK m. 9 yurt dışı aktarım (Vercel ABD, Supabase AB, Google e-posta) için standart sözleşme ve Kurum'a bildirim; VERBİS muafiyeti; 5651 trafik kaydı saklama; metinlerin genel kontrolü.
+
 ## Sıradaki işler
 - Alan adı (kullanıcı alacak) → Vercel'e bağlama (.com ana, .com.tr yönlendirme), Supabase site adresi, videodaki adres.
 - Yasal metinlerdeki veri sorumlusu bilgileri (kişi/şirket adı, adres, e-posta).

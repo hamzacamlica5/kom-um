@@ -254,7 +254,7 @@ export function Settings() {
       {!isStandalone() && <p className="note-info">Telefonunda uygulama gibi kullanmak için: iPhone'da Safari <b>Paylaş → Ana Ekrana Ekle</b>, Android'de Chrome <b>⋮ → Uygulamayı yükle</b>.</p>}
       <button className="btn btn-ghost" onClick={() => auth.signOut()}>Çıkış yap</button>
       <nav className="legal-links small">
-        <Link to="/guven">Güven Merkezi</Link><Link to="/kvkk">KVKK Aydınlatma Metni</Link><Link to="/gizlilik">Gizlilik</Link><Link to="/kullanim-sartlari">Kullanım Şartları</Link>
+        <Link to="/guven">Güven Merkezi</Link><Link to="/kvkk">KVKK Aydınlatma Metni</Link><Link to="/gizlilik">Gizlilik</Link><Link to="/cerez-politikasi">Çerezler</Link><Link to="/kullanim-sartlari">Kullanım Şartları</Link><Link to="/iletisim">İletişim</Link>
       </nav>
       <button className="linkbtn danger center-self" onClick={() => setDel(true)}>Hesabımı sil</button>
       <DeleteAccountSheet open={del} onClose={() => setDel(false)} />

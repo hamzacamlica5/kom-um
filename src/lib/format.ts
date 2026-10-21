@@ -43,10 +43,7 @@ export function ago(s: string): string {
   return dateTR(s);
 }
 
-export function price(units: number): number {
-  // Daire başı 15 TL (KDV dahil), en az 99 TL
-  return Math.max(99, 15 * Math.max(units, 0));
-}
+export { monthly as price } from "../legal/info"; // Daire başı 15 TL (KDV dahil), en az 99 TL
 
 export function parseAmount(s: string): number | null {
   // "1.250,50" veya "1250.5" veya "1250"

@@ -1,4 +1,6 @@
 /* Apartmanca — kapı yeşili + zil sarısı; mobil öncelikli tek sütun, altta sekme çubuğu */
+/* Yazı tipi kendi sunucumuzdan (Google Fonts kullanılmaz: ziyaretçi IP adresi yurt dışına gitmesin). Lisans: /fonts/OFL.txt */
+@font-face { font-family: "Plus Jakarta Sans"; src: url("/fonts/plus-jakarta-sans.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
 :root {
   --bg: #F3F5F2; --surface: #FFFFFF; --surface-2: #EAEFEA; --line: #DCE3DC;
   --ink: #17221E; --muted: #5E6B65;
@@ -291,3 +293,7 @@ ul.plain { margin: 0; padding-left: 18px; display: flex; flex-direction: column;
 .promise { background: var(--surface); border-radius: var(--r); padding: 14px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 4px; }
 .promise h2 { margin: 0 !important; font-size: 1rem; color: var(--brand); }
 .promise p { font-size: .92rem; }
+.legal-body .kv { list-style: none; padding-left: 0; }
+.legal-body .tbl { width: 100%; border-collapse: collapse; font-size: .9rem; display: block; overflow-x: auto; }
+.legal-body .tbl th, .legal-body .tbl td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.legal-body .tbl th { font-weight: 700; }

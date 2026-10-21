@@ -1,7 +1,7 @@
 // Apartmanca servis çalışanı: uygulama kabuğunu önbellekler, telefon bildirimlerini gösterir.
 const VERSION = "__BUILD__";
 const CACHE = "komsum-" + VERSION;
-const SHELL = ["/", "/app.js?v=" + VERSION, "/app.css?v=" + VERSION, "/api/config", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/badge-72.png"];
+const SHELL = ["/", "/fonts/plus-jakarta-sans.woff2", "/app.js?v=" + VERSION, "/app.css?v=" + VERSION, "/api/config", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/badge-72.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -16,7 +16,7 @@ self.addEventListener("fetch", (e) => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   // Veri istekleri (Supabase) her zaman ağdan gelir.
-  if (url.origin !== location.origin && !url.hostname.endsWith("fonts.googleapis.com") && !url.hostname.endsWith("fonts.gstatic.com")) return;
+  if (url.origin !== location.origin) return;
   if (url.pathname.startsWith("/api/") && url.pathname !== "/api/config") return;
 
   if (req.mode === "navigate") {

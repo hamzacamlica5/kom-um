@@ -10,7 +10,7 @@ import { Cash } from "./screens/cash";
 import { Announcements, Requests, Documents } from "./screens/board";
 import { Units, Settings, Inbox } from "./screens/manage";
 import { Breakdown } from "./screens/breakdown";
-import { Kvkk, Privacy, Terms, Trust } from "./screens/legal";
+import { legalPageFor } from "./screens/legal";
 import { Emergency } from "./screens/emergency";
 
 const I = {
@@ -127,10 +127,8 @@ function Root() {
     }
   }, [userId, profile, invite]);
 
-  if (path === "/guven") return <Trust />;
-  if (path === "/kvkk") return <Kvkk />;
-  if (path === "/gizlilik") return <Privacy />;
-  if (path === "/kullanim-sartlari") return <Terms />;
+  const legal = legalPageFor(path);
+  if (legal) return legal;
   if (invite) return <Join token={invite} />;
   if (!userId) return <Login />;
   if (loadError && (profile === undefined || buildings === undefined)) return <div className="auth"><div className="auth-card"><Brand small /><ErrorBox msg={loadError} retry={refresh} /></div></div>;

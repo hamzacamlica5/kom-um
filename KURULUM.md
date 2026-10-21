@@ -129,3 +129,14 @@ Veritabanını değiştiren her güncelleme `supabase/guncellemeler/` klasörün
 - `bun scripts/build.ts` → `dist/` klasörünü üretir. Vercel derleme yapmaz, `dist/` olduğu gibi yayınlanır; kod değişince yeniden derleyip `dist/` ile birlikte gönder.
 - `bun scripts/dev-server.ts` → yerel Postgres üzerinde Supabase taklidiyle çalışır (giriş kodu `123456`). Yapay zekâ taslağını denemek için `OMNIROUTE_URL` ve `OMNIROUTE_API_KEY` ile başlat.
 - `bash supabase/tests/run.sh` → veritabanı kurallarının testleri. `bun test` → istemci ve bildirim gönderici testleri. `node scripts/e2e.mjs`, `e2e-2.mjs` ve `e2e-3.mjs` → tarayıcıda uçtan uca senaryolar.
+
+## 7. Tanıtım sitesi (apartmanca.com)
+
+Site `site/` klasöründe hazır derlenmiş durur (çerezsiz, dış kaynaksız). Kaynakları `site-src/`, yasal metinler `src/legal/` içinde; uygulama ile site aynı metinleri kullanır.
+
+1. vercel.com → **Add New → Project** → aynı GitHub reposunu (`kom-um`) seç.
+2. **Root Directory** alanında **Edit** de ve `site` klasörünü seç. Framework: **Other**. Build ve Install komutlarını boş bırak.
+3. **Deploy** de. Geçici adres `https://<proje-adı>.vercel.app` olur.
+4. Alan adı alınınca: bu projede **Settings → Domains** → `apartmanca.com` ve `www.apartmanca.com`; uygulama projesinde (`kom-um`) `app.apartmanca.com`.
+
+Siteyi değiştirdikten sonra: `bun scripts/build-site.ts` (uygulama adresi için `SITE_APP_URL=...`). Şirket bilgileri ve fiyat tek yerde: `src/legal/info.ts`.
