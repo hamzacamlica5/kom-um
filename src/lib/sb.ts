@@ -26,6 +26,7 @@ function friendly(status: number, body: any): string {
   const msg: string = body?.message || body?.msg || body?.error_description || body?.error || "";
   if (status === 0) return "İnternet bağlantısı yok. Bağlantını kontrol edip tekrar dene.";
   if (/Token has expired|otp_expired|invalid.*otp|Token.*invalid/i.test(msg)) return "Kod hatalı ya da süresi dolmuş. Yeni kod iste.";
+  if (/Invalid login credentials|invalid_credentials/i.test(msg)) return "E-posta ya da şifre hatalı.";
   if (/rate limit|too many|security purposes/i.test(msg)) return "Çok sık denedin. Bir dakika bekleyip tekrar dene.";
   if (/JWT expired/i.test(msg)) return "Oturumun yenilenemedi. Tekrar giriş yap.";
   if (/permission denied|row-level security/i.test(msg)) return "Bu işlem için yetkin yok.";
@@ -110,6 +111,11 @@ export const auth = {
   async verifyCode(email: string, token: string) {
     const s = await raw("/auth/v1/verify", { method: "POST", auth: false, headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: "email", email, token }) });
+    setSession(normalize(s));
+  },
+  async signInWithPassword(email: string, password: string) {
+    const s = await raw("/auth/v1/token?grant_type=password", { method: "POST", auth: false, headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }) });
     setSession(normalize(s));
   },
   async signOut() {

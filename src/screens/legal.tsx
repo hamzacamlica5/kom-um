@@ -3,6 +3,11 @@ import { Link } from "../state";
 import { Brand } from "./auth";
 import { LinkCtx, LEGAL_PAGES, LEGAL_UPDATED, type LegalPage } from "../legal/texts";
 import { COMPANY } from "../legal/info";
+import { STORE } from "../lib/platform";
+
+// Mağaza paketinde fiyat ve satın alma içeren sayfalar menüde gösterilmez (adres bilinirse yine açılır).
+const SALES_PAGES = ["/on-bilgilendirme-formu", "/mesafeli-satis-sozlesmesi", "/iptal-ve-iade"];
+const visible = (path: string) => !STORE || !SALES_PAGES.includes(path);
 
 // Uygulamadaki yasal sayfalar; metinler src/legal/texts.tsx'ten gelir (site ile aynı kaynak).
 export const LEGAL = { owner: COMPANY.unvan, address: COMPANY.adres, email: COMPANY.eposta, updated: LEGAL_UPDATED };
@@ -21,7 +26,7 @@ function Shell({ page }: { page: LegalPage }) {
           <p className="muted small">Son güncelleme: {LEGAL_UPDATED}</p>
           <Body />
           <nav className="legal-nav">
-            {LEGAL_PAGES.filter((p) => p.path !== page.path).map((p) => <Link key={p.path} to={p.path}>{p.title}</Link>)}
+            {LEGAL_PAGES.filter((p) => p.path !== page.path && visible(p.path)).map((p) => <Link key={p.path} to={p.path}>{p.title}</Link>)}
           </nav>
         </article>
       </div>

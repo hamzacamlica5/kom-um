@@ -3,6 +3,7 @@ import { auth, rpc } from "../lib/sb";
 import { price, parseAmount, tl } from "../lib/format";
 import { Field, useAction, useToast, Loading, ErrorBox } from "../ui";
 import { useApp, useRoute, Link } from "../state";
+import { STORE, isReviewEmail } from "../lib/platform";
 
 export function Brand({ small }: { small?: boolean }) {
   return (
@@ -20,7 +21,8 @@ export function Brand({ small }: { small?: boolean }) {
 export function Login() {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
-  const [step, setStep] = useState<"email" | "code">("email");
+  const [step, setStep] = useState<"email" | "code" | "password">("email");
+  const [password, setPassword] = useState("");
   const { busy, run } = useAction();
   const toast = useToast();
 
@@ -32,6 +34,7 @@ export function Login() {
         {step === "email" ? (
           <form className="stack" onSubmit={async (e) => {
             e.preventDefault();
+            if (isReviewEmail(email)) { setStep("password"); return; }
             const ok = await run(() => auth.sendCode(email.trim().toLowerCase()));
             if (ok) { setStep("code"); toast("Kod e-postana gönderildi."); }
           }}>
@@ -41,6 +44,16 @@ export function Login() {
             <button className="btn btn-primary btn-lg" disabled={busy}>{busy ? "Gönderiliyor…" : "Giriş kodu gönder"}</button>
             <p className="muted small">Şifre yok. E-postana gelen kodla giriş yaparsın; hesabın yoksa otomatik açılır.</p>
             <p className="muted small">Devam ederek <Link to="/kullanim-sartlari">Kullanım Şartları</Link>'nı kabul etmiş ve <Link to="/kvkk">KVKK Aydınlatma Metni</Link>'ni okumuş olursun. <Link to="/guven">Güven Merkezi</Link></p>
+          </form>
+        ) : step === "password" ? (
+          <form className="stack" onSubmit={async (e) => {
+            e.preventDefault();
+            await run(() => auth.signInWithPassword(email.trim().toLowerCase(), password));
+          }}>
+            <p><b>{email}</b> inceleme hesabı.</p>
+            <Field label="Şifre"><input id="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} /></Field>
+            <button className="btn btn-primary btn-lg" disabled={busy || !password}>{busy ? "Kontrol ediliyor…" : "Giriş yap"}</button>
+            <button type="button" className="linkbtn" onClick={() => { setStep("email"); setPassword(""); }}>E-postayı değiştir</button>
           </form>
         ) : (
           <form className="stack" onSubmit={async (e) => {
@@ -141,11 +154,11 @@ export function CreateBuilding({ onBack }: { onBack?: () => void }) {
       <Field label="Aylık aidat (TL)" hint="Tüm dairelere uygulanır. Farklı olanları sonra tek tek düzenleyebilirsin.">
         <input id="bdues" inputMode="decimal" value={f.dues} onChange={(e) => setF({ ...f, dues: e.target.value })} placeholder="750" />
       </Field>
-      <div className="pricebox">
+      {!STORE && <div className="pricebox">
         <span>{n} daire için abonelik</span>
         <b>{tl(price(n))} / ay</b>
         <small>Daire başı aylık 15 TL (KDV dahil), en az 99 TL. Yıllık ödemede 12 ay kullan, 10 ay öde. Ücreti apartman öder, sakinler ayrıca ödemez.</small>
-      </div>
+      </div>}
       <button className="btn btn-primary btn-lg" disabled={busy}>{busy ? "Kuruluyor…" : "Apartmanı oluştur"}</button>
       {onBack && <button type="button" className="linkbtn" onClick={onBack}>Geri dön</button>}
     </form>

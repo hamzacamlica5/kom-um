@@ -1,5 +1,5 @@
 // Apartmanca servis çalışanı: uygulama kabuğunu önbellekler, telefon bildirimlerini gösterir.
-const VERSION = "5fd29c5c38";
+const VERSION = "1e54ecca9e";
 const CACHE = "komsum-" + VERSION;
 const SHELL = ["/", "/fonts/plus-jakarta-sans.woff2", "/app.js?v=" + VERSION, "/app.css?v=" + VERSION, "/api/config", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/badge-72.png"];
 

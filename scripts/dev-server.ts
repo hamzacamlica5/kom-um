@@ -7,6 +7,7 @@ import { mkdirSync, existsSync } from "fs";
 import { draftAnnouncement } from "../api/_ai.js";
 
 const PORT = Number(process.env.PORT || 5173);
+const DIST = process.env.DIST || "dist"; // mağaza paketini denemek için: DIST=dist-store
 const DB = process.env.DEV_DB || "postgres://postgres@localhost:5433/komsum_dev";
 const root = new URL("..", import.meta.url).pathname;
 const FILES = "/tmp/komsum-files/";
@@ -62,6 +63,13 @@ async function supabase(req: Request, path: string): Promise<Response> {
     if (path === "/auth/v1/verify") {
       const { email, token } = await req.json();
       if (token !== "123456") return json({ msg: "Token has expired or is invalid" }, 403);
+      const r = await sql.unsafe(`insert into auth.users(id, email) values (md5(${lit(email)})::uuid, ${lit(email)}) on conflict (id) do update set email = excluded.email returning id`);
+      const user = { id: r[0].id, email };
+      return json({ access_token: "dev." + btoa(JSON.stringify({ sub: user.id, email })), refresh_token: "r-" + user.id, expires_in: 3600, user });
+    }
+    if (path === "/auth/v1/token" && url.searchParams.get("grant_type") === "password") {
+      const { email, password } = await req.json();
+      if (password !== "inceleme-dev") return json({ msg: "Invalid login credentials" }, 400);
       const r = await sql.unsafe(`insert into auth.users(id, email) values (md5(${lit(email)})::uuid, ${lit(email)}) on conflict (id) do update set email = excluded.email returning id`);
       const user = { id: r[0].id, email };
       return json({ access_token: "dev." + btoa(JSON.stringify({ sub: user.id, email })), refresh_token: "r-" + user.id, expires_in: 3600, user });
@@ -172,9 +180,9 @@ Bun.serve({
       const aiEnabled = !!(process.env.OMNIROUTE_URL && process.env.OMNIROUTE_API_KEY);
       return new Response(`window.KOMSUM=${JSON.stringify({ supabaseUrl: url.origin + "/sb", supabaseKey: "dev", vapidPublicKey: "", aiEnabled })};`, { headers: { "Content-Type": "application/javascript" } });
     }
-    const file = Bun.file(root + "dist" + (url.pathname === "/" ? "/index.html" : url.pathname));
-    if (url.pathname !== "/" && existsSync(root + "dist" + url.pathname)) return new Response(file);
-    return new Response(Bun.file(root + "dist/index.html"), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    const file = Bun.file(root + DIST + (url.pathname === "/" ? "/index.html" : url.pathname));
+    if (url.pathname !== "/" && existsSync(root + DIST + url.pathname)) return new Response(file);
+    return new Response(Bun.file(root + DIST + "/index.html"), { headers: { "Content-Type": "text/html; charset=utf-8" } });
   },
 });
 console.log("Apartmanca geliştirme sunucusu: http://localhost:" + PORT);

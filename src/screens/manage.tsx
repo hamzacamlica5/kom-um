@@ -3,6 +3,7 @@ import { auth, from, rpc, serverPost, forgetSession } from "../lib/sb";
 import { toCsv, downloadCsv, slug } from "../lib/csv";
 import { STATUS_LABEL, istanbulToday } from "../lib/format";
 import { tl, parseAmount, price, ago } from "../lib/format";
+import { STORE } from "../lib/platform";
 import { enablePush, disablePush, pushState, PushState, isStandalone } from "../lib/push";
 import { useApp, useRoute, Link } from "../state";
 import { Empty, ErrorBox, Field, Loading, PageHead, ReasonSheet, Sheet, useAction, useLoad, useToast } from "../ui";
@@ -35,7 +36,7 @@ export function Units() {
   const curUnit = sel && sel !== "new" ? sel : null;
   return (
     <div className="page">
-      <PageHead title="Daireler" sub={d ? `${d.units.length} daire · ${d.members.filter((m) => m.role === "resident").length} sakin · abonelik ${tl(price(d.units.length))}/ay` : undefined}
+      <PageHead title="Daireler" sub={d ? `${d.units.length} daire · ${d.members.filter((m) => m.role === "resident").length} sakin${STORE ? "" : ` · abonelik ${tl(price(d.units.length))}/ay`}` : undefined}
         action={<button className="btn btn-ghost btn-sm" onClick={() => setSel("new")}>Daire ekle</button>} />
       {data.loading && !d ? <Loading /> : data.error ? <ErrorBox msg={data.error} retry={data.reload} /> : (
         <>
@@ -223,7 +224,7 @@ export function Settings() {
             <Field label="Adres"><input id="s-baddr" maxLength={200} value={bf.address} onChange={(e) => setBf({ ...bf, address: e.target.value })} /></Field>
             <button className="btn btn-ghost btn-sm" disabled={busy}>Kaydet</button>
           </form>
-          <div className="pricebox"><span>{b.unit_count} daire · aylık abonelik</span><b>{tl(b.monthly_price)} / ay</b><small>Daire başı aylık 15 TL (KDV dahil), en az 99 TL. Yıllık ödemede 12 ay kullan, 10 ay öde. Ücreti apartman öder, sakinler ayrıca ödemez.</small></div>
+          {!STORE && <div className="pricebox"><span>{b.unit_count} daire · aylık abonelik</span><b>{tl(b.monthly_price)} / ay</b><small>Daire başı aylık 15 TL (KDV dahil), en az 99 TL. Yıllık ödemede 12 ay kullan, 10 ay öde. Ücreti apartman öder, sakinler ayrıca ödemez.</small></div>}
           <button className="btn btn-ghost" onClick={() => setTransfer(true)}>Yönetimi devret</button>
         </section>
       )}

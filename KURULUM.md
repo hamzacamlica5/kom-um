@@ -140,3 +140,15 @@ Site `site/` klasöründe hazır derlenmiş durur (çerezsiz, dış kaynaksız).
 4. Alan adı alınınca: bu projede **Settings → Domains** → `apartmanca.com` ve `www.apartmanca.com`; uygulama projesinde (`kom-um`) `app.apartmanca.com`.
 
 Siteyi değiştirdikten sonra: `bun scripts/build-site.ts` (uygulama adresi için `SITE_APP_URL=...`). Şirket bilgileri ve fiyat tek yerde: `src/legal/info.ts`.
+
+## 8. Mağaza incelemesi için demo hesap
+
+Apple ve Google inceleme ekipleri e-posta kodu alamaz; onlar için iki sabit hesap var (`src/lib/platform.ts` → `REVIEW_EMAILS`). Bu e-postalarla girişte kod yerine şifre sorulur.
+
+1. Supabase → **Authentication → Users → Add user → Create new user**:
+   - `inceleme@apartmanca.com` — güçlü bir şifre, **Auto Confirm User** işaretli
+   - `inceleme-sakin@apartmanca.com` — başka bir güçlü şifre, **Auto Confirm User** işaretli
+2. **SQL Editor**'de `supabase/inceleme-demo.sql` dosyasının tamamını çalıştır → "Demo apartman hazır" mesajı.
+3. Şifreleri yalnızca App Store Connect ve Play Console'daki "inceleme bilgileri" alanına yaz; başka yerde paylaşma.
+
+Mağaza paketi `TARGET=store bun scripts/build.ts` ile `dist-store/` klasörüne derlenir; bu pakette fiyat, abonelik ve satın alma sayfaları gösterilmez.

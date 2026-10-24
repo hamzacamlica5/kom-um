@@ -53,6 +53,12 @@ Bu dosya, ürünle ilgili verilen kararların kaydıdır. Yeni bir özellik geli
 - İade politikası (kullanıcı onayı bekliyor): ilk ödemeden sonra 14 gün koşulsuz tam iade; yıllık yenilemede de 14 gün; aylık yenilemede o ay iade yok. Yıllık yenilemeden 7 gün önce e-posta hatırlatma. Fiyat değişikliği 30 gün önceden bildirilir.
 - Hukukçuya sorulacaklar: KVKK m. 9 yurt dışı aktarım (Vercel ABD, Supabase AB, Google e-posta) için standart sözleşme ve Kurum'a bildirim; VERBİS muafiyeti; 5651 trafik kaydı saklama; metinlerin genel kontrolü.
 
+## Mağazalar (24 Ekim 2026)
+- Hedef: kısa sürede App Store ve Google Play. Şirket şahıs şirketi → Apple'da **bireysel** hesap (D-U-N-S gerekmez, satıcı adı kişi adı). Google'da D-U-N-S ile şirket hesabı denenecek; olmazsa kişisel hesap + 12 kişi/14 gün kapalı test (pilot apartmanlar).
+- Mağaza uygulaması, web'den satın alınan hizmetin **ücretsiz yardımcısı** (Apple 3.1.3(f)): uygulamada fiyat, abonelik düğmesi ve ödeme bağlantısı yok. Abonelik yalnızca web'den (iyzico). `TARGET=store` derlemesi bunu sağlar.
+- İnceleme ekibi için şifreli demo hesaplar ve `supabase/inceleme-demo.sql`.
+- Paketleme: Capacitor, derleme GitHub Actions'ta (bu ortamda npm kapalı). Yerel bildirim için Firebase gerekecek.
+
 ## Sıradaki işler
 - Alan adı (kullanıcı alacak) → Vercel'e bağlama (.com ana, .com.tr yönlendirme), Supabase site adresi, videodaki adres.
 - Yasal metinlerdeki veri sorumlusu bilgileri (kişi/şirket adı, adres, e-posta).
