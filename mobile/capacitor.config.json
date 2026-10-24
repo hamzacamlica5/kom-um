@@ -1,0 +1,8 @@
+{
+  "appId": "com.apartmanca.app",
+  "appName": "Apartmanca",
+  "webDir": "www",
+  "server": { "androidScheme": "https" },
+  "android": { "adjustMarginsForEdgeToEdge": "auto" },
+  "ios": { "contentInset": "never" }
+}

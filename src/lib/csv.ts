@@ -11,7 +11,14 @@ export function toCsv(header: string[], rows: Cell[][]): string {
   return "﻿" + [header, ...rows].map((r) => r.map(esc).join(";")).join("\r\n");
 }
 
-export function downloadCsv(name: string, csv: string) {
+export async function downloadCsv(name: string, csv: string) {
+  // Mağaza paketi: dosyayı uygulamanın geçici klasörüne yazıp telefonun paylaşım menüsünü aç
+  const P = (window as any).Capacitor?.Plugins;
+  if (P?.Filesystem && P?.Share) {
+    const w = await P.Filesystem.writeFile({ path: name, data: csv, directory: "CACHE", encoding: "utf8" });
+    await P.Share.share({ title: name, files: [w.uri] }).catch(() => {});
+    return;
+  }
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
   const file = new File([blob], name, { type: "text/csv" });
   const nav: any = navigator;

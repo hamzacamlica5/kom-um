@@ -1,3 +1,4 @@
+import { apiUrl } from "./platform";
 // Supabase'e doğrudan HTTP ile bağlanan küçük istemci.
 // Yalnızca uygulamanın kullandığı parçalar: e-posta kodu ile giriş,
 // tablo okuma (basit filtreler), RPC çağrısı ve dosya yükleme/okuma.
@@ -202,7 +203,7 @@ export async function serverPost<T = any>(path: string, body: any = {}): Promise
   await ensureFresh();
   let res: Response;
   try {
-    res = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + (session?.access_token || "") }, body: JSON.stringify(body) });
+    res = await fetch(apiUrl(path), { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + (session?.access_token || "") }, body: JSON.stringify(body) });
   } catch { throw new ApiError(friendly(0, null), 0); }
   const j = await res.json().catch(() => ({}));
   if (!res.ok) throw new ApiError(j.message || "Bir şeyler ters gitti. Tekrar dene.", res.status);

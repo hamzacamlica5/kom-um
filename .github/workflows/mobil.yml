@@ -1,0 +1,121 @@
+# Apartmanca mağaza paketlerini derler.
+# Android: test APK'sı → "android-test" sürümü (Releases). iOS: imzasız simülatör derlemesi (kontrol amaçlı).
+# Her işin sonucu ve kayıtları ci/android ve ci/ios dallarına yazılır.
+name: Mobil paketler
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["src/**", "public/**", "mobile/**", "scripts/build.ts", ".github/workflows/mobil.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mobil
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  APP_ORIGIN: ${{ vars.APP_ORIGIN || 'https://kom-um.vercel.app' }}
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+
+      - name: Web paketini derle (mağaza modu)
+        run: |
+          bun install 2>&1 | tee -a ci.log
+          TARGET=store bun scripts/build.ts 2>&1 | tee -a ci.log
+          rm -rf mobile/www && cp -r dist-store mobile/www
+
+      - name: Capacitor ve Android projesi
+        working-directory: mobile
+        run: |
+          npm install --no-audit --no-fund 2>&1 | tee -a ../ci.log
+          npx cap add android 2>&1 | tee -a ../ci.log
+          npx @capacitor/assets generate --android --iconBackgroundColor '#1D5C4F' --iconBackgroundColorDark '#1D5C4F' --splashBackgroundColor '#F3F5F2' --splashBackgroundColorDark '#0F1513' 2>&1 | tail -20 | tee -a ../ci.log
+          npx cap sync android 2>&1 | tee -a ../ci.log
+
+      - name: APK derle
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee -a ../../ci.log
+          cp app/build/outputs/apk/debug/app-debug.apk ../../apartmanca-test.apk
+
+      - name: Test APK'sını yayınla
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          gh release delete android-test -y --cleanup-tag 2>/dev/null || true
+          gh release create android-test apartmanca-test.apk --prerelease --target "$GITHUB_SHA" \
+            --title "Android test sürümü" \
+            --notes "Telefona yüklemek için apartmanca-test.apk dosyasını indir. Mağaza sürümü değildir. Derleme: ${GITHUB_SHA::7}, adres: $APP_ORIGIN" 2>&1 | tee -a ci.log
+
+      - name: Sonucu ci/android dalına yaz
+        if: always()
+        env: { GH_TOKEN: "${{ github.token }}", DURUM: "${{ job.status }}" }
+        run: |
+          mkdir -p /tmp/sonuc && cp ci.log /tmp/sonuc/ci.log 2>/dev/null || touch /tmp/sonuc/ci.log
+          cd /tmp/sonuc
+          printf "durum: %s\ncommit: %s\nzaman: %s\n" "$DURUM" "$GITHUB_SHA" "$(date -u +%FT%TZ)" > DURUM.txt
+          grep -nE "error|ERROR|FAILED|What went wrong|Exception" ci.log | head -80 > hatalar.txt || true
+          tail -300 ci.log > son.txt
+          git init -q && git checkout -q -b ci/android && git add . 
+          git -c user.name="ci" -c user.email="ci@users.noreply.github.com" commit -qm "Android derleme: $DURUM"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:ci/android
+
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+
+      - name: Web paketini derle (mağaza modu)
+        run: |
+          bun install 2>&1 | tee -a ci.log
+          TARGET=store bun scripts/build.ts 2>&1 | tee -a ci.log
+          rm -rf mobile/www && cp -r dist-store mobile/www
+
+      - name: Capacitor ve iOS projesi
+        working-directory: mobile
+        run: |
+          npm install --no-audit --no-fund 2>&1 | tee -a ../ci.log
+          npx cap add ios 2>&1 | tee -a ../ci.log
+          npx @capacitor/assets generate --ios --splashBackgroundColor '#F3F5F2' --splashBackgroundColorDark '#0F1513' 2>&1 | tail -20 | tee -a ../ci.log
+          npx cap sync ios 2>&1 | tee -a ../ci.log
+
+      - name: iOS simülatör derlemesi (imzasız)
+        working-directory: mobile/ios/App
+        run: |
+          if [ -d App.xcworkspace ]; then TARGET_ARGS="-workspace App.xcworkspace"; else TARGET_ARGS="-project App.xcodeproj"; fi
+          xcodebuild $TARGET_ARGS -scheme App -configuration Debug -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build 2>&1 | tail -400 | tee -a ../../../ci.log
+
+      - name: Sonucu ci/ios dalına yaz
+        if: always()
+        env: { GH_TOKEN: "${{ github.token }}", DURUM: "${{ job.status }}" }
+        run: |
+          mkdir -p /tmp/sonuc && cp ci.log /tmp/sonuc/ci.log 2>/dev/null || touch /tmp/sonuc/ci.log
+          cd /tmp/sonuc
+          printf "durum: %s\ncommit: %s\nzaman: %s\n" "$DURUM" "$GITHUB_SHA" "$(date -u +%FT%TZ)" > DURUM.txt
+          grep -nE "error:|ERROR|FAILED|BUILD FAILED|\*\* BUILD" ci.log | head -80 > hatalar.txt || true
+          tail -300 ci.log > son.txt
+          git init -q && git checkout -q -b ci/ios && git add .
+          git -c user.name="ci" -c user.email="ci@users.noreply.github.com" commit -qm "iOS derleme: $DURUM"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:ci/ios

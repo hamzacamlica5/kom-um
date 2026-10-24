@@ -3,6 +3,7 @@ import { rpc } from "../lib/sb";
 import { tl, istanbulToday, dateTR } from "../lib/format";
 import { useApp, Link } from "../state";
 import { Empty, ErrorBox, Loading, PageHead, Segmented, useLoad, useToast } from "../ui";
+import { APP_ORIGIN } from "../lib/platform";
 
 type Cat = { category: string; amount: number; count: number };
 type Data = { from: string; to: string; total_expense: number; categories: Cat[]; my_billed: number | null; building_billed: number; share_ratio: number | null; unit_count: number };
@@ -60,8 +61,8 @@ export function Breakdown() {
     const top = d.categories.slice(0, 4).map((c) => `${c.category} %${Math.round((Number(c.amount) / total) * 100)}`).join(", ");
     const text = `${b!.name} · ${label.toLowerCase()} giderler: ${tl(total)}. ${top}. Apartmanca ile her kuruş kayıtlı.`;
     try {
-      if ((navigator as any).share) await (navigator as any).share({ title: "Aidatımız nereye gitti?", text, url: location.origin });
-      else { await navigator.clipboard.writeText(text + " " + location.origin); toast("Özet kopyalandı."); }
+      if ((navigator as any).share) await (navigator as any).share({ title: "Aidatımız nereye gitti?", text, url: APP_ORIGIN });
+      else { await navigator.clipboard.writeText(text + " " + APP_ORIGIN); toast("Özet kopyalandı."); }
     } catch {}
   };
 

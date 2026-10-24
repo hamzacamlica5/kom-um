@@ -12,6 +12,7 @@ import { Units, Settings, Inbox } from "./screens/manage";
 import { Breakdown } from "./screens/breakdown";
 import { legalPageFor } from "./screens/legal";
 import { Emergency } from "./screens/emergency";
+import { STORE } from "./lib/platform";
 
 const I = {
   home: <path d="M3 11.5 12 4l9 7.5M5.5 9.8V20h13V9.8" />,
@@ -142,7 +143,9 @@ createRoot(document.getElementById("root")!).render(
   <Router><AppState><ToastHost><Root /></ToastHost></AppState></Router>
 );
 
-if ("serviceWorker" in navigator && location.hostname !== "localhost") {
+if (STORE) {
+  // Paket içinde servis çalışanı yok: dosyalar zaten uygulamanın içinde.
+} else if ("serviceWorker" in navigator && location.hostname !== "localhost") {
   addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
 } else if ("serviceWorker" in navigator && (window as any).KOMSUM?.devSW) {
   navigator.serviceWorker.register("/sw.js").catch(() => {});

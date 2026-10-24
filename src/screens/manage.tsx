@@ -3,7 +3,7 @@ import { auth, from, rpc, serverPost, forgetSession } from "../lib/sb";
 import { toCsv, downloadCsv, slug } from "../lib/csv";
 import { STATUS_LABEL, istanbulToday } from "../lib/format";
 import { tl, parseAmount, price, ago } from "../lib/format";
-import { STORE } from "../lib/platform";
+import { STORE, APP_ORIGIN } from "../lib/platform";
 import { enablePush, disablePush, pushState, PushState, isStandalone } from "../lib/push";
 import { useApp, useRoute, Link } from "../state";
 import { Empty, ErrorBox, Field, Loading, PageHead, ReasonSheet, Sheet, useAction, useLoad, useToast } from "../ui";
@@ -13,7 +13,7 @@ type Unit = { id: string; label: string; monthly_dues: number; due_day: number; 
 type Member = { id: string; user_id: string; role: string; unit_id: string | null; created_at: string };
 type Invite = { id: string; unit_id: string; token: string; expires_at: string; used_at: string | null; revoked_at: string | null };
 
-const inviteUrl = (t: string) => `${location.origin}/davet/${t}`;
+const inviteUrl = (t: string) => `${APP_ORIGIN}/davet/${t}`;
 
 // ===================== Daireler, sakinler, davetler =====================
 export function Units() {
@@ -192,7 +192,8 @@ export function Settings() {
     <div className="page">
       <PageHead title="Ayarlar" />
 
-      <section className="card stack">
+      {/* Paket içinde web bildirimi çalışmaz; yerel bildirim gelene kadar gizli. */}
+      {!STORE && <section className="card stack">
         <h2>Telefon bildirimleri</h2>
         {ps === null ? <Loading /> : ps === "on" ? (
           <>
@@ -214,7 +215,7 @@ export function Settings() {
             <button className="btn btn-primary" disabled={busy} onClick={async () => { await run(enablePush, "Bildirimler açıldı."); setPs(await pushState()); }}>Bildirimleri aç</button>
           </>
         )}
-      </section>
+      </section>}
 
       {isManager && b && (
         <section className="card stack">

@@ -1,8 +1,10 @@
 // POST /api/ai-draft — yönetici için duyuru taslağı (Authorization: Bearer <oturum>).
 // Gövde: { building: "<apartman id>", notes: "kısa notlar" } → { title, body }
 import { draftAnnouncement } from "./_ai.js";
+import { cors } from "./_cors.js";
 
 export default async function handler(req, res) {
+  if (cors(req, res)) return;
   if (req.method !== "POST") return res.status(405).json({ message: "POST bekleniyor" });
   const { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, OMNIROUTE_URL, OMNIROUTE_API_KEY, OMNIROUTE_MODEL } = process.env;
   if (!OMNIROUTE_URL || !OMNIROUTE_API_KEY) return res.status(503).json({ message: "Yapay zekâ yardımcısı bu kurulumda açık değil." });
