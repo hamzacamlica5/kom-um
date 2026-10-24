@@ -1,0 +1,1 @@
+70: - Java compilation errors at the end of the build output
