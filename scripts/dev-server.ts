@@ -18,6 +18,8 @@ const lit = (v: any): string => {
   if (v === null || v === undefined) return "NULL";
   if (typeof v === "number") return String(v);
   if (typeof v === "boolean") return v ? "true" : "false";
+  // Diziler PostgREST'teki gibi Postgres dizisi olur ('{"a","b"}'), nesneler JSON
+  if (Array.isArray(v)) return "'{" + v.map((x) => '"' + String(x).replace(/["\\]/g, "\\$&").replace(/'/g, "''") + '"').join(",") + "}'";
   if (typeof v === "object") return "'" + JSON.stringify(v).replace(/'/g, "''") + "'";
   return "'" + String(v).replace(/'/g, "''") + "'";
 };

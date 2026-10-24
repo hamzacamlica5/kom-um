@@ -59,6 +59,12 @@ Bu dosya, ürünle ilgili verilen kararların kaydıdır. Yeni bir özellik geli
 - İnceleme ekibi için şifreli demo hesaplar ve `supabase/inceleme-demo.sql`.
 - Paketleme: Capacitor, derleme GitHub Actions'ta (bu ortamda npm kapalı). Yerel bildirim için Firebase gerekecek.
 
+## Aidat güncelleme / zam (24 Ekim 2026)
+- Daireler → **Aidatları güncelle (zam)**: yüzde, sabit tutar ya da yeni tutar; tüm aidatlı daireler ya da seçili daireler.
+- Yeni tutar, henüz oluşturulmamış ilk aydan geçerli; oluşmuş borçlar (para kayıtları) değişmez.
+- İsteğe bağlı kat malikleri kurulu karar tarihi ve açıklama; varsayılan olarak sakinlere otomatik duyuru.
+- **Sessiz zam yok:** her tutar değişikliği (tek daire düzenlemesi dahil) kalıcı **aidat geçmişine** yazılır; yönetici tümünü, sakin kendi dairesini etkileyenleri görür; kimse silemez.
+
 ## Sıradaki işler
 - Alan adı (kullanıcı alacak) → Vercel'e bağlama (.com ana, .com.tr yönlendirme), Supabase site adresi, videodaki adres.
 - Yasal metinlerdeki veri sorumlusu bilgileri (kişi/şirket adı, adres, e-posta).

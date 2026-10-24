@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { from, rpc, upload, fileUrl } from "../lib/sb";
 import { tl, currentPeriod, shiftPeriod, periodName, dateTR, istanbulToday, parseAmount } from "../lib/format";
 import { useApp, Link } from "../state";
+import { DuesHistory } from "./duesupdate";
 import { Badge, Empty, ErrorBox, Field, FilePick, Loading, Money, PageHead, ReasonSheet, Segmented, Sheet, useAction, useLoad, useToast } from "../ui";
 
 type Charge = { id: string; unit_id: string; unit_label: string; period: string; period_id: string; amount: number; due_date: string; paid: number; remaining: number; pending: number; status: string };
@@ -250,6 +251,7 @@ function ResidentDues() {
             ))}
             {d!.charges.length === 0 && <Empty title="Henüz aidat borcu oluşturulmadı" />}
           </ul>
+          <DuesHistory bid={bid} unitId={b!.unit_id} />
           {d!.notices.length > 0 && <>
             <h2 className="h-sec">Ödeme bildirimlerim</h2>
             <ul className="list compact">

@@ -340,4 +340,44 @@ select t_eq((select count(*)::int from building_emergency), 0, 'yabancı acil re
 select t_eq((select count(*)::int from building_managers(:'b2')), 0, 'yabancı yöneticiyi görmez');
 reset role;
 \o
+
+-- ---------- 15. Aidat güncelleme (zam) ----------
+\o /dev/null
+select user_id as mgr from memberships where building_id = :'bid' and role = 'manager' and ended_at is null limit 1 \gset
+select user_id as res from memberships where building_id = :'bid' and role = 'resident' and ended_at is null limit 1 \gset
+select set_config('request.jwt.claims', json_build_object('sub', :'mgr')::text, false);
+set role authenticated;
+select coalesce(sum(amount),0) as charges_before from dues_charges where building_id = :'bid' \gset
+select count(*)::int as hc0 from dues_changes where building_id = :'bid' \gset
+select monthly_dues as u1_old from units where id = :'u1' \gset
+select count(*)::int as paid_units from units where building_id = :'bid' and archived_at is null and monthly_dues > 0 \gset
+select t_eq(update_dues(:'bid', 'percent', 20, null, current_date, 'Asansör revizyonu nedeniyle', true), :paid_units, 'yüzde zam aidatlı tüm dairelere uygulandı');
+select t_eq((select monthly_dues from units where id = :'u1'), round(:u1_old * 1.2), 'Daire 1 yeni tutar %20 fazlası');
+select t_eq((select monthly_dues from units where building_id = :'bid' and label = 'Daire 12'), 0::numeric(12,2), 'aidatsız daire aidatsız kalır');
+select t_eq((select coalesce(sum(amount),0) from dues_charges where building_id = :'bid'), :charges_before::numeric, 'oluşmuş borçlar değişmez');
+select t_eq((select effective_period from dues_changes where building_id = :'bid' order by created_at desc limit 1), next_dues_period(:'bid'), 'geçerlilik: oluşturulmamış ilk ay');
+select t_eq((select count(*)::int from announcements where building_id = :'bid' and title = 'Aidat güncellemesi'), 1, 'sakinlere duyuru gitti');
+select t_eq(update_dues(:'bid', 'set', 2000, array[:'u2']::uuid[], null, null, false), 1, 'tek daireye yeni tutar');
+select t_eq((select monthly_dues from units where id = :'u2'), 2000::numeric(12,2), 'Daire 2 = 2000');
+select t_eq((select count(*)::int from announcements where building_id = :'bid' and title = 'Aidat güncellemesi'), 1, 'duyurusuz güncelleme duyuru atmaz');
+select t_expect_err(format($q$select update_dues(%L, 'set', 2000, array[%L]::uuid[], null, null, false)$q$, :'bid', :'u2'), 'Hiçbir dairenin');
+select save_unit(:'bid', :'u2', 'Daire 2', 2100, 10);
+select t_eq((select count(*)::int from dues_changes where building_id = :'bid'), :hc0 + 3, 'tek daire düzenlemesi de geçmişe yazılır');
+select save_unit(:'bid', :'u2', 'Daire 2', 2100, 12);
+select t_eq((select count(*)::int from dues_changes where building_id = :'bid'), :hc0 + 3, 'tutar değişmezse geçmişe yazılmaz');
+select t_expect_err(format($q$select update_dues(%L, 'add', -99999, null, null, null, false)$q$, :'bid'), 'sıfırın altına');
+select t_expect_err(format($q$select update_dues(%L, 'percent', 900, null, null, null, false)$q$, :'bid'), 'arasında olmalı');
+select t_expect_err(format($q$select update_dues(%L, 'set', 100, null, current_date + 3, null, false)$q$, :'bid'), 'ileri olamaz');
+reset role;
+select set_config('request.jwt.claims', json_build_object('sub', :'res')::text, false);
+set role authenticated;
+select t_eq((select count(*)::int from dues_changes where building_id = :'bid'), :hc0 + 3, 'sakin aidat geçmişini görür');
+select t_expect_err(format($q$select update_dues(%L, 'percent', 10, null, null, null, false)$q$, :'bid'), 'yalnızca yönetici');
+select t_expect_err($q$delete from dues_changes$q$, 'permission denied');
+reset role;
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-00000000000d"}', false);
+set role authenticated;
+select t_eq((select count(*)::int from dues_changes), 0, 'yabancı aidat geçmişini görmez');
+reset role;
+\o
 \echo 'TÜM TESTLER GEÇTİ'

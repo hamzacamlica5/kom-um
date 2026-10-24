@@ -8,6 +8,7 @@ import { enablePush, disablePush, pushState, PushState, isStandalone } from "../
 import { useApp, useRoute, Link } from "../state";
 import { Empty, ErrorBox, Field, Loading, PageHead, ReasonSheet, Sheet, useAction, useLoad, useToast } from "../ui";
 import { CreateBuilding } from "./auth";
+import { DuesUpdateSheet, DuesHistory } from "./duesupdate";
 
 type Unit = { id: string; label: string; monthly_dues: number; due_day: number; sort_order: number };
 type Member = { id: string; user_id: string; role: string; unit_id: string | null; created_at: string };
@@ -21,6 +22,8 @@ export function Units() {
   const bid = b!.building_id;
   const [sel, setSel] = useState<Unit | "new" | null>(null);
   const [bulk, setBulk] = useState(false);
+  const [duesOpen, setDuesOpen] = useState(false);
+  const [histKey, setHistKey] = useState(0);
   const data = useLoad(async () => {
     const [units, members, invites] = await Promise.all([
       from<Unit>("units").eq("building_id", bid).isNull("archived_at"),
@@ -46,6 +49,7 @@ export function Units() {
           {d!.units.some((u) => !d!.members.some((m) => m.unit_id === u.id)) && (
             <button className="btn btn-primary" onClick={() => setBulk(true)}>Toplu davet: boş dairelerin bağlantıları</button>
           )}
+          {d!.units.length > 0 && <button className="btn btn-ghost" onClick={() => setDuesOpen(true)}>Aidatları güncelle (zam)</button>}
           <ul className="list">
             {d!.units.map((u) => {
               const ms = d!.members.filter((m) => m.unit_id === u.id);
@@ -62,6 +66,8 @@ export function Units() {
         </>
       )}
       <UnitSheet open={!!sel} unit={curUnit} isNew={sel === "new"} bid={bid} d={d} onClose={() => setSel(null)} onChanged={data.reload} />
+      {d && <DuesHistory bid={bid} reloadKey={histKey} />}
+      {d && <DuesUpdateSheet open={duesOpen} bid={bid} units={d.units} onClose={() => setDuesOpen(false)} onDone={() => { data.reload(); setHistKey((k) => k + 1); }} />}
       <BulkInviteSheet open={bulk} bid={bid} building={b!.name} onClose={() => { setBulk(false); data.reload(); }} />
     </div>
   );

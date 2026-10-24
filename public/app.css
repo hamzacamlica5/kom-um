@@ -297,3 +297,12 @@ ul.plain { margin: 0; padding-left: 18px; display: flex; flex-direction: column;
 .legal-body .tbl { width: 100%; border-collapse: collapse; font-size: .9rem; display: block; overflow-x: auto; }
 .legal-body .tbl th, .legal-body .tbl td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
 .legal-body .tbl th { font-weight: 700; }
+/* Aidat güncelleme */
+.check-row { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.check-row input { width: 20px; height: 20px; accent-color: var(--brand); flex: none; }
+.check-row span:nth-of-type(2) { margin-left: auto; }
+.pick-list { max-height: 240px; overflow: auto; }
+.pick-list li { padding: 10px 14px; }
+.preview { background: var(--surface-2); border-radius: var(--r-sm); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.preview .list { max-height: 220px; overflow: auto; }
+.preview .row-side { flex-direction: row; gap: 10px; align-items: baseline; }
